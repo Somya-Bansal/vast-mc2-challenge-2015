@@ -1,3 +1,32 @@
-body{
-    font-family: rubik,Helvetica,Arial,sans-serif;
+body {
+    font-family: rubik, Helvetica, Arial, sans-serif;
+}
+
+.inputLabel {
+    font-size  : 1.25em;
+    font-weight: 500;
+    color      : #005f73;
+}
+
+input[type=checkbox] {
+    margin-right: 12 px;
+    transform   : scale(1.5);
+}
+
+/* color palette*/
+.colors {
+
+    /* Primary - #0a9396 */
+    color: #005f73;
+    /* Primary Varient - #005f73 */
+    color: #0a9396;
+    /* Secondary - #ca6702 */
+    color: #ca6702;
+    /* Secondary Variant - #ee9b00  */
+    color: #ee9b00;
+
+    /* Background - #F1FAEE  */
+    color: #F1FAEE;
+    /* Error - #ae2012 */
+    color: #ae2012;
 }

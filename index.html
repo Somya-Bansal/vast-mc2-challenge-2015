@@ -14,6 +14,38 @@
 <body>
     <div class="container">
         <h1 class="text-center pageHeading">VAST 2015 MC2</h1>
+        <!-- Weekend Days - Dropdown - All three daysm Friday, Saturday, Sunday -->
+        <div class="row">
+            <div class="col-6 form-group">
+                <label for="weekend-day-select" class="inputLabel">Weekend Days</label>
+                <select class="form-control" id="weekend-day-select" onchange="updateForDay()">
+                    <option value="1" selected="selected">All Days</option>
+                    <option value="2">Friday</option>
+                    <option value="3">Saturday</option>
+                    <option value="4">Sunday</option>
+                </select>
+            </div>
+            <!-- Location - Dropdown - All Locations, Entry Corridor, Kiddie Land, Tundra Land, Wet Land, Coaster Alley  -->
+            <div class="col-6 form-group">
+                <label for="location-select" class="inputLabel">Location</label>
+                <select class="form-control" id="location-select" onchange="updateForLocation()">
+                    <option value="1" selected="selected">All Locations</option>
+                    <option value="2">Entry Corridor</option>
+                    <option value="3">Kiddie Land</option>
+                    <option value="4">Tundra Land</option>
+                    <option value="5">Wet Land</option>
+                    <option value="6">Coaster Alley</option>
+                </select>
+            </div>
+            <!-- External communication - Checkbox -->
+            <div class="col-12 checkbox">
+                <label class="inputLabel"><input class="mr-2" type="checkbox" value="">External Communication</label>
+            </div>
+            <!-- Outliers - Checkbox -->
+            <div class="col-12 checkbox">
+                <label class="inputLabel"><input class="mr-2" type="checkbox" value="">Outliers</label>
+            </div>
+        </div>
     </div>
 </body>
 
