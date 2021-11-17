@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
     <script src='https://d3js.org/d3.v5.min.js'></script>
     <script src="js/main.js"></script>
+    <script src="js/bar.js"></script>
 </head>
 
 <body>
@@ -19,8 +20,8 @@
             <div class="col-6 form-group">
                 <label for="weekend-day-select" class="inputLabel">Weekend Days</label>
                 <select class="form-control" id="weekend-day-select" onchange="updateForDay()">
-                    <option value="1" selected="selected">All Days</option>
-                    <option value="2">Friday</option>
+                    <option value="1">All Days</option>
+                    <option value="2" selected="selected">Friday</option>
                     <option value="3">Saturday</option>
                     <option value="4">Sunday</option>
                 </select>
@@ -29,8 +30,8 @@
             <div class="col-6 form-group">
                 <label for="location-select" class="inputLabel">Location</label>
                 <select class="form-control" id="location-select" onchange="updateForLocation()">
-                    <option value="1" selected="selected">All Locations</option>
-                    <option value="2">Entry Corridor</option>
+                    <option value="1">All Locations</option>
+                    <option value="2" selected="selected">Entry Corridor</option>
                     <option value="3">Kiddie Land</option>
                     <option value="4">Tundra Land</option>
                     <option value="5">Wet Land</option>
@@ -39,18 +40,19 @@
             </div>
             <!-- External communication - Checkbox -->
             <div class="col-12 checkbox">
-                <label class="inputLabel"><input class="mr-2" type="checkbox" value="">External Communication</label>
+                <label class="inputLabel"><input id="extcomm" class="mr-2" type="checkbox" value="">External Communication</label>
             </div>
             <!-- Outliers - Checkbox -->
             <div class="col-12 checkbox">
-                <label class="inputLabel"><input class="mr-2" type="checkbox" value="">Outliers</label>
+                <label class="inputLabel"><input id="outliers" class="mr-2" type="checkbox" value="">Outliers</label>
             </div>
         </div>
         
         <!-- Add svg for your chart like this -->
-        <div class="row" id="vis1">
-            <svg  width="1100" height="600"></svg>
+        <div class="row" id="barchart">
+            <svg width="1100" height="600"></svg>
         </div>
+        
     </div>
 </body>
 
