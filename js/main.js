@@ -1,3 +1,6 @@
+locations = [
+  "Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"
+]
 const data = [
   d3.csv('data/comm-data-Fri.csv'),
   //   d3.csv('data/comm-data-Sat.csv'),
@@ -9,14 +12,14 @@ let friData = [];
 let allDaysData = [];
 document.addEventListener('DOMContentLoaded', () => {
   const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-    width = 445 - margin.left - margin.right,
-    height = 445 - margin.top - margin.bottom;
+    width = 900 - margin.left - margin.right,
+    height = 900 - margin.top - margin.bottom;
   Promise.all(data).then((values) => {
-    friData = values[0].slice(0, 28000);
-    console.log(friData);
+    friData = values[0];
+    // console.log(friData);
 
     res = d3.rollup(
-      friData.filter((it) => new Date(it.Timestamp).getHours() === 9),
+      friData.filter((it) => new Date(it.Timestamp).getHours() <= 24),
       (d) => d.length,
       (d) => d.location,
       (d) => d.from
@@ -42,14 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const root = pack;
 
+    var color = d3.scaleOrdinal()
+      .domain(locations)
+      .range(["#264653", "#2A9D8F", "#E9C46A", "#F4A261", "E76F51"])
     svg
       .append('g')
-      .attr('fill', '#ccc')
       .selectAll('circle')
       .data(root.leaves())
       .join('circle')
       .attr('transform', (d) => `translate(${d.x},${d.y})`)
       .attr('r', (d) => d.r)
+      .style("fill", function (d) { return color(d.parent.data[0]) })
+      .attr('opacity', '0.3')
       .append('title');
     //   .text((d) => {
     //     // console.log(d);
@@ -68,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .attr('transform', (d) => `translate(${d.x},${d.y}) scale(${d.r / 30})`)
       .selectAll('tspan')
       .data((d) => {
-        console.log(d.parent.data[0]);
+        // console.log(d.parent.data[0]);
         return (d.data[0] + '').split(/\s+/g);
       })
       .join('tspan')
