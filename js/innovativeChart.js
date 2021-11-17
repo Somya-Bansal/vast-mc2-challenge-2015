@@ -1,23 +1,4 @@
-// const data = [
-//     d3.csv('data/comm-data-Fri.csv'),
-//     //   d3.csv('data/comm-data-Sat.csv'),
-//     //   d3.csv('data/comm-data-Sun.csv'),
-//   ];
-//   let satData = [];
-//   let sunData = [];
-//   let friData = [];
-//   let allDaysData = [];
-//   document.addEventListener('DOMContentLoaded', () => {
-   
-//     Promise.all(data).then((values) => {
-//       friData = values[0];
-//       // console.log(friData);
-  
-//     });
-//   });
-  
-
-function drawInnovativeChart() {
+function drawInnovativeChart(friData) {
 
     locations = [
         "Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"
