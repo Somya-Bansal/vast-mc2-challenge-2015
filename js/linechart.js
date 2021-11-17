@@ -67,27 +67,15 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     switch (day) {
         case "2":
             frequency = frequencyAnalyzer(fri_data, interval);
-            for (let obj of fri_data) {
-                timestamps.push(obj.Timestamp);
-            }
             break;
         case "3":
             frequency = frequencyAnalyzer(sat_data, interval);
-            for (let obj of sat_data) {
-                timestamps.push(obj.Timestamp);
-            }
             break;
         case "4":
             frequency = frequencyAnalyzer(sun_data, interval);
-            for (let obj of sun_data) {
-                timestamps.push(obj.Timestamp);
-            }
             break;
         case "1":
             frequency = [frequencyAnalyzer(fri_data, interval), frequencyAnalyzer(sat_data, interval), frequencyAnalyzer(sun_data, interval)];
-            for (let obj of sat_data) {
-                timestamps.push(obj.Timestamp);
-            }
     }
 
     var parseTime = d3.timeParse("%H:%M:%S");
@@ -116,8 +104,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     // X Axis
     var timePads = [parseTime("00:00:01"), parseTime("23:59:59")];
 
-    var domain = d3.extent(timestamps);
-    domain = [timePads[0], timePads[1]];
+    var domain = [timePads[0], timePads[1]];
 
     var xScale = d3.scaleTime()
         .domain(domain)
