@@ -14,6 +14,7 @@ var sundata=[];
 document.addEventListener('DOMContentLoaded', function() {
 
     barSvg = d3.select('#barchart');
+    barSvg2 = d3.select('#barchart2');
     // barWidth = +barSvg.style('width').replace('px','');
     // barHeight = +barSvg.style('height').replace('px','');;
     // barInnerWidth = barWidth - barMargin.left - barMargin.right;
@@ -61,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.addEventListener('change',function(){
       render_chart();
-      
   });
 
 function render_chart(){
