@@ -30,3 +30,27 @@ input[type=checkbox] {
     /* Error - #ae2012 */
     color: #ae2012;
 }
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: .5rem;
+    background: #FFFFFF;
+    color: #313639;
+    border: 1px solid #313639;
+    border-radius: 8px;
+    pointer-events: none;
+    font-size: 1.0rem;
+}
+
+.sourcenode {
+    fill: green;
+}
+
+.targetnode {
+    fill: red;
+}
+
+.node {
+    fill: #005f73;
+}
