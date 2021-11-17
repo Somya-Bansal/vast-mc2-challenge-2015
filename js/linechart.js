@@ -238,9 +238,9 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         focus.style("opacity", 1)
         ttdiv.style("opacity", 1)
     }
-    function mousemove() {
+    function mousemove(e) {
         // recover coordinate we need
-        var x0 = Math.floor(xScale.invert(d3.mouse(this)[0]));
+        var x0 = Math.floor(xScale.invert(d3.pointer(e)[0]));
         var i = d3.bisect(timeData, x0, 0);
 
         var ttstr
@@ -302,8 +302,8 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
         ttdiv
             .html(ttstr)
-            .style('left', (d3.event.pageX + 15) + 'px')
-            .style('top', (d3.event.pageY - 40) + 'px')
+            .style('left', (e.pageX + 15) + 'px')
+            .style('top', (e.pageY - 40) + 'px')
     }
     function mouseout() {
         focus.style("opacity", 0)
