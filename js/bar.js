@@ -18,9 +18,6 @@ function drawBar(day, loc, outlier_flag, extcomm_flag){
             day_data = fridata;
             break;
     }
-
-    console.log(day_data, day, loc, outlier_flag, extcomm_flag);
-
     var loc_;
     switch (loc) {
         case "1":
@@ -51,29 +48,66 @@ function drawBar(day, loc, outlier_flag, extcomm_flag){
         d.location==loc_;
     })
 
-    var to_freq = {}
-    var from_freq = {}
-    for (obj in day_data){
-        if (obj.to in to_freq){
-            to_freq[obj.to]+=1
+    day_data.filter((d)=>{
+        if (!extcomm_flag){
+            d.ReceiverId!=-1;
+        }
+        
+    })
+    
+
+    var ReceiverId_freq=[];
+    var SenderId_freq=[];
+    var sIds = [];
+    var rIds = [];
+
+    day_data.forEach(d=>{
+        if (d.ReceiverId in ReceiverId_freq){
+            ReceiverId_freq[d.ReceiverId]+=1
         }
         else{
-            to_freq[obj.to]=1
+            ReceiverId_freq[d.ReceiverId]=1
+            rIds.push(parseInt(d.ReceiverId));
         }
 
-        if (obj.from in to_freq){
-            to_freq[obj.from]+=1
+        if (d.SenderId in SenderId_freq){
+            SenderId_freq[d.SenderId]+=1
         }
         else{
-            to_freq[obj.from]=1
+            SenderId_freq[d.SenderId]=1
+            sIds.push(parseInt(d.SenderId));
         }
-    }
+    })
 
-    var to_data = day_data.sort((a,b)=>{return to_freq[b.to]-to_freq[a.to]})
-    var from_data = day_data.sort((a,b)=>{return from_freq[b.from]-from_freq[a.from]})
+    rIds=rIds.sort((a,b)=>{return ReceiverId_freq[b]-ReceiverId_freq[a]});
+    sIds=sIds.sort((a,b)=>{return SenderId_freq[b]-SenderId_freq[a]});
 
-    // console.log(to_data)
-    // console.log(from_data)
+    sIds = sIds.slice(0,5);
+
+    xScale = d3.scaleLinear()
+               .domain([0,SenderId_freq[sIds[0]]])
+               .range([0,1100])
+    
+    yScale = d3.scaleBand()
+                .domain(sIds)
+                .range([0,600])
+
+    let g=barSvg.append('g');
+
+    g.selectAll('g')
+    .data(sIds)
+    .enter().append("rect")
+      .attr("x", xScale(0) )
+      .attr("y", function(d) { return yScale(d); })
+      .attr("height", yScale.bandwidth())
+      .attr("width", function(d) {xScale(SenderId_freq[d])})
+      .style('fill',"#69b3a2");
+
+    g.append('g')
+    .call(d3.axisLeft(yScale));
+
+    g.append('g')
+    .call(d3.axisBottom(xScale));
 
     
 }
