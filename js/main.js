@@ -6,12 +6,11 @@ sun_data = [];
 
 // This function is called once the HTML page is fully loaded by the browser
 document.addEventListener('DOMContentLoaded', function () {
-	var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
 	var rowConverter = function (d) {
 		const df = isNaN(+d.from) ? -1 : +d.from;
 		const dt = isNaN(+d.to) ? -1 : +d.to;
 		return {
-			Timestamp: parseTime(d.Timestamp),
+			Timestamp: new Date(d.Timestamp),
 			SenderId: df,
 			ReceiverId: dt,
 			Location: d.location
