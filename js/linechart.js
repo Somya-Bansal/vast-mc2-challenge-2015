@@ -51,13 +51,17 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     var day = d3.select("#weekend-day-select").property("value");
     var interval = "hour";
 
-    var xmargin = 100;
-    var ymargin = 60;
-
-    var offset = 5;
-
-    var width = 1000, height = 600;
-    var xAxisTranslate = height / 2 + ymargin;
+    const width = 1000
+    const height = 600
+    const margin = {
+        top: 20,
+        right: 30,
+        bottom: 60,
+        left: 100
+    }
+    const innerHeight = height - margin.top - margin.bottom
+    const innerWidth = width - margin.left - margin.right
+    
     var svg = d3.select("#svglinechart");
     svg.selectAll("*").remove();
 
@@ -108,17 +112,18 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
     var xScale = d3.scaleTime()
         .domain(domain)
-        .range([0, width - 100]);
+        .range([margin.left, margin.left + innerWidth]);
 
     var xAxis = d3.axisBottom(xScale);
 
     svg.append("g")
-        .attr("transform", "translate(" + xmargin + "," + xAxisTranslate + ")")
+        .attr("transform", `translate(0,${innerHeight + margin.top})`)
         .call(xAxis.ticks(d3.timeHour.every(1)));
 
     svg.append("text")
-        .attr("transform", "translate(500,400)")
-        .style("text-anchor", "middle")
+        .attr("text-anchor", "middle")
+        .attr("x", (width + 100) / 2)
+        .attr("y", innerHeight + 60)
         .text("Time");
 
     // Y Axis
@@ -127,18 +132,21 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         maxcomms = d3.extent([0, d3.max(frequency[0]), d3.max(frequency[1]), d3.max(frequency[2])])
     var yScale = d3.scaleLinear()
         .domain(maxcomms)
-        .range([height / 2, 0]);
+        .range([innerHeight + margin.top, margin.top]);
 
     var yAxis = d3.axisLeft(yScale);
 
     svg.append("g")
-        .attr("transform", "translate(" + xmargin + ", " + ymargin + ")")
+        .attr("transform", `translate(${margin.left}, 0)`)
         .call(yAxis);
 
     svg.append("text")
         .attr("id", "ylabel")
         .attr("text-anchor", "middle")
-        .attr("transform", "translate(50,200)rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", 30)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
         .text("Amount of Communications");
 
     // Lines
@@ -146,7 +154,6 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         for (var i = 0; i < frequency.length; i++) {
             var color = i == 0 ? "#0a9396" : i == 1 ? "#ca6702" : "#ee9b00"
             svg.append("path")
-                .attr('transform', `translate(${xmargin},${ymargin})`)
                 .datum(frequency[i])
                 .attr("fill", "none")
                 .attr("stroke", color)
@@ -175,7 +182,6 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         }
     } else {
         svg.append("path")
-            .attr('transform', `translate(${xmargin},${ymargin})`)
             .datum(frequency)
             .attr("fill", "none")
             .attr("stroke", "#005f73")
@@ -227,7 +233,6 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         .style("pointer-events", "all")
         .attr('width', width)
         .attr('height', height)
-        .attr('transform', 'translate(' + xmargin + ',' + 0 + ')')
         .on('mouseover', mouseover)
         .on('mousemove', mousemove)
         .on('mouseout', mouseout);
@@ -252,15 +257,15 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
                 ttstr = `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[i - 1];
                 focus
-                    .attr("cx", xScale(parseHourMin(`${h}:${m}`)) + xmargin)
-                    .attr("cy", yScale(frequency[i - 1]) + ymargin)
+                    .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
+                    .attr("cy", yScale(frequency[i - 1]))
                 if (day == "1") {
                     ttstr = "Friday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[0][i - 1]
                         + "<br/>------<br/>Saturday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[1][i - 1]
                         + "<br/>------<br/>Sunday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[2][i - 1];
                     focus
-                        .attr("cx", xScale(parseHourMin(`${h}:${m}`)) + xmargin)
-                        .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])) + ymargin)
+                        .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
+                        .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])))
                 }
 
                 break;
@@ -271,34 +276,34 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
                 ttstr = `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[i - 1];
                 focus
-                    .attr("cx", xScale(parseHourMin(`${h}:${m}`)) + xmargin)
-                    .attr("cy", yScale(frequency[i - 1]) + ymargin)
+                    .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
+                    .attr("cy", yScale(frequency[i - 1]))
                 if (day == "1") {
                     ttstr = "Friday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[0][i - 1]
                         + "<br/>------<br/>Saturday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[1][i - 1]
                         + "<br/>------<br/>Sunday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[2][i - 1];
                     focus
-                        .attr("cx", xScale(parseHourMin(`${h}:${m}`)) + xmargin)
-                        .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])) + ymargin)
+                        .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
+                        .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])))
                 }
                 break;
             default:
                 ttstr = "Hour: " + i + "<br/>Frequency: " + frequency[i - 1];
                 focus
-                    .attr("cx", xScale(parseHour(i)) + xmargin)
-                    .attr("cy", yScale(frequency[i - 1]) + ymargin)
+                    .attr("cx", xScale(parseHour(i)))
+                    .attr("cy", yScale(frequency[i - 1]))
                 if (day == "1") {
                     ttstr = "Friday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + frequency[0][i - 1]
                         + "<br/>------<br/>Saturday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + frequency[1][i - 1]
                         + "<br/>------<br/>Sunday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + frequency[2][i - 1];
                     focus
-                        .attr("cx", xScale(parseHour(i)) + xmargin)
-                        .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])) + ymargin)
+                        .attr("cx", xScale(parseHour(i)))
+                        .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])))
                 }
                 break;
         }
-        if(i <= 0)
-            focus.attr("cx", xScale(parseHour(0)) + xmargin).attr("cy", yScale(0) + ymargin);
+        if (i <= 0)
+            focus.attr("cx", xScale(parseHour(0))).attr("cy", yScale(0));
 
         ttdiv
             .html(ttstr)
