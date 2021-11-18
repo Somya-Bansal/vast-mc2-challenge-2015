@@ -45,10 +45,28 @@ function frequencyAnalyzer(arr, interval) {
     return frequency;
 }
 
+function locFilter(arr, loc) {
+    switch(loc) {
+        case "2":
+            return arr.filter(d => d.Location == "Entry Corridor")
+        case "3":
+            return arr.filter(d => d.Location == "Kiddie Land")
+        case "4":
+            return arr.filter(d => d.Location == "Tundra Land")
+        case "5":
+            return arr.filter(d => d.Location == "Wet Land")
+        case "6":
+            return arr.filter(d => d.Location == "Coaster Alley")
+        default:
+            return arr;
+    }
+}
+
 function drawLineChart(fri_data, sat_data, sun_data) {
 
     // Grab from elements
     var day = d3.select("#weekend-day-select").property("value");
+    var loc = d3.select("#location-select").property("value");
     var interval = "hour";
 
     const width = 1000
@@ -66,20 +84,26 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     svg.selectAll("*").remove();
 
     // Calculate communication frequenices within chosen interval
-    var timestamps = [];
     var frequency = [];
     switch (day) {
         case "2":
+            fri_data = locFilter(fri_data, loc)
             frequency = frequencyAnalyzer(fri_data, interval);
             break;
         case "3":
+            sat_data = locFilter(sat_data, loc)
             frequency = frequencyAnalyzer(sat_data, interval);
             break;
         case "4":
+            sun_data = locFilter(sun_data, loc)
             frequency = frequencyAnalyzer(sun_data, interval);
             break;
         case "1":
+            fri_data = locFilter(fri_data, loc)
+            sat_data = locFilter(sat_data, loc)
+            sun_data = locFilter(sun_data, loc)
             frequency = [frequencyAnalyzer(fri_data, interval), frequencyAnalyzer(sat_data, interval), frequencyAnalyzer(sun_data, interval)];
+            break;
     }
 
     var parseTime = d3.timeParse("%H:%M:%S");

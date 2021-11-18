@@ -43,3 +43,7 @@ function updateForDay() {
 	drawNetworkM(fri_data, sat_data, sun_data);
 }
 
+function updateForLocation() {
+	drawLineChart(fri_data, sat_data, sun_data);
+}
+
