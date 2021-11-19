@@ -44,11 +44,11 @@ div.tooltip {
 }
 
 .sourcenode {
-    fill: green;
+    fill: #0a9396;
 }
 
 .targetnode {
-    fill: red;
+    fill: #ee9b00;
 }
 
 .node {
