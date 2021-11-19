@@ -116,21 +116,21 @@ function drawNetworkM() {
         .style("stroke", "#aaa")
         .attr("stroke-width", 2)
         .attr("class", function (d) { return `nid${d.source}` })
-        .on('mouseover', function (d, i) {
+        .on('mouseover', function (e, d) {
             d3.select(this).attr("stroke-width", 5)
             d3.select(`#c${d.source.name}`).attr("class", "sourcenode")
             d3.select(`#c${d.target.name}`).attr("class", "targetnode")
             ttdiv.style("opacity", 1);
         })
-        .on('mousemove', function (d, i) {
+        .on('mousemove', function (e, d) {
             let ca = adjList.get(d.source.name).get(d.target.name);
             let sn = d.source.name
             let tn = d.target.name > 0 ? d.target.name : "external";
             ttdiv.html(ca + " communications from " + sn + " to " + tn)
-                .style('left', (d3.event.pageX + 15) + 'px')
-                .style('top', (d3.event.pageY - 40) + 'px');
+                .style('left', (e.pageX + 15) + 'px')
+                .style('top', (e.pageY - 40) + 'px');
         })
-        .on('mouseout', function (d, i) {
+        .on('mouseout', function (e, d) {
             d3.select(this).attr("stroke-width", 2)
             d3.select(`#c${d.source.name}`).attr("class", "node")
             d3.select(`#c${d.target.name}`).attr("class", "node")
@@ -138,19 +138,19 @@ function drawNetworkM() {
         });
     var node = svg.selectAll("circle").data(ndata.nodes).enter().append("circle").attr("r", 5).attr("id", function (d) { return "c" + d.name; })
         .attr("class", "node")
-        .on('mouseover', function (d, i) {
+        .on('mouseover', function (e, d) {
             d3.select(this).attr("r", 8)
             d3.selectAll(`.nid${d.id}`).attr("stroke-width", 5);
             ttdiv.style("opacity", 1);
         })
-        .on('mousemove', function (d, i) {
+        .on('mousemove', function (e, d) {
             let cn = d.name > 0 ? d.name : "external";
             let ca = d.name > 0 ? adjList.get(d.name).size : 0;
             ttdiv.html("id: " + cn + "<br>unique receivers: " + ca)
-                .style('left', (d3.event.pageX + 15) + 'px')
-                .style('top', (d3.event.pageY - 40) + 'px');
+                .style('left', (e.pageX + 15) + 'px')
+                .style('top', (e.pageY - 40) + 'px');
         })
-        .on('mouseout', function (d, i) {
+        .on('mouseout', function (e, d) {
             d3.select(this).attr("r", 5)
             d3.selectAll(`.nid${d.id}`).attr("stroke-width", 2);
             ttdiv.style("opacity", 0);
