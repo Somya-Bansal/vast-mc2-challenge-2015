@@ -29,17 +29,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const allCsvFiles = [
 		d3.csv('data/comm-data-Fri.csv'),
-		//   d3.csv('data/comm-data-Sat.csv'),
-		//   d3.csv('data/comm-data-Sun.csv'),
+		d3.csv('data/comm-data-Sat.csv'),
+		d3.csv('data/comm-data-Sun.csv'),
 	];
 	Promise.all(allCsvFiles).then((values) => {
 		friData = values[0];
-		drawInnovativeChart(friData);
+		satData = values[1];
+		sunData = values[2];
+		drawInnovativeChart(friData, satData, sunData);
 	});
 });
 
 function updateForDay() {
 	drawLineChart(fri_data, sat_data, sun_data);
 	drawNetworkM(fri_data, sat_data, sun_data);
+	drawInnovativeChart(friData, satData, sunData)
 }
 
