@@ -16,12 +16,11 @@
   <script src="js/bar.js"></script>
 </head>
 
-<body>
-  <div class="container">
-    <h1 class="text-center pageHeading">VAST 2015 MC2</h1>
-    <!-- Weekend Days - Dropdown - All three daysm Friday, Saturday, Sunday -->
-    <div class="row">
-      <div class="col-6 form-group">
+<body class="d-flex">
+  <nav class="navbar fixed-top navbar-light justify-content-evenly navStyles">
+    <div class="d-flex justify-content-around col-5 px-0">
+      <!-- Weekend Days - Dropdown - All three daysm Friday, Saturday, Sunday -->
+      <div class="form-group col-4 px-0">
         <label for="weekend-day-select" class="inputLabel">Weekend Days</label>
         <select class="form-control" id="weekend-day-select">
           <option value="1">All Days</option>
@@ -31,7 +30,7 @@
         </select>
       </div>
       <!-- Location - Dropdown - All Locations, Entry Corridor, Kiddie Land, Tundra Land, Wet Land, Coaster Alley  -->
-      <div class="col-6 form-group">
+      <div class="form-group col-4 px-0">
         <label for="location-select" class="inputLabel">Location</label>
         <select class="form-control" id="location-select">
           <option value="1" selected="selected">All Locations</option>
@@ -42,36 +41,41 @@
           <option value="6">Coaster Alley</option>
         </select>
       </div>
+    </div>
+    <h1 class="text-center pageHeading">VAST 2015 MC2</h1>
+    <div class="d-flex justify-content-around col-5 px-0">
       <!-- External communication - Checkbox -->
-      <div class="col-12 checkbox">
+      <div class="checkbox col-4 px-0">
         <label class="inputLabel"><input id="extcomm" class="mr-2" type="checkbox" value="" />External
           Communication</label>
       </div>
       <!-- Outliers - Checkbox -->
-      <div class="col-12 checkbox">
+      <div class="checkbox">
         <label class="inputLabel"><input id="outliers" class="mr-2" type="checkbox" value="" />Outliers</label>
       </div>
     </div>
+  </nav>
+  <div class="chartContainer">
 
     <!-- Chart SVGs -->
-    <div class="row d-flex justify-content-center border border">
-      <div class="col-6 left">
+    <div class="d-flex justify-content-center border border">
+      <div class="left">
         <svg id="barchart" width="500" height="500"></svg>
       </div>
-      <div class="col-6 right">
+      <div class="right">
         <svg id="barchart2" width="500" height="500"></svg>
       </div>
     </div>
-    <div class="row d-flex justify-content-center border" id="vislinechart">
+    <div class="d-flex justify-content-center border" id="vislinechart">
       <svg id="svglinechart" width="1000" height="600"></svg>
     </div>
-    <div class="row d-flex justify-content-center border" id="visnetworkm">
+    <div class="d-flex justify-content-center border" id="visnetworkm">
       <svg id="svgnetworkm" width="1000" height="600"></svg>
     </div>
-    <div class="row border">
+    <div class="d-flex justify-content-center border">
       <svg id="visInnovative" width="1200" height="900"></svg>
     </div>
-    <div class="row d-flex justify-content-center border border">
+    <div class="d-flex justify-content-center border border">
       <svg id="visHeatmap" width="850" height="250"></svg>
     </div>
 
