@@ -71,3 +71,15 @@ div.tooltip {
 .node {
     fill: #005f73;
 }
+.barChartRect{
+    fill:rgba(238,155,0,0.5);
+    stroke: #ee9b00;
+    /* padding: */
+}
+.yaxisBar .domain{
+    stroke: none;
+}
+.labelBar{
+    fill:#005f73;
+    font-size: 18px;
+}

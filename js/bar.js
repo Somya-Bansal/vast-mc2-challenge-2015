@@ -130,12 +130,12 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
 
     const width = 500
-    const height = 500
+    const height = 700
     const margin = {
         top: 50,
         right: 10,
         bottom: 10,
-        left: 30
+        left: 90
     }
     const innerHeight = height - margin.top - margin.bottom
     const innerWidth = width - margin.left - margin.right
@@ -145,13 +145,14 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     xScale = d3.scaleLinear()
         .domain([0, freq[data[0]]])
-        .range([margin.left, margin.left + innerWidth]);
+        .range([margin.left, margin.left + width]);
 
     yScale = d3.scaleBand()
         .domain(data)
-        .range([margin.top, margin.top + innerHeight]).padding(0.1);
+        .range([margin.top, margin.top + innerHeight]).padding(0.3);
 
-    xAxis = d3.axisTop(xScale).tickSizeOuter(0);
+    xAxis = d3.axisTop(xScale)
+    // .tickSizeOuter(0);
     yAxis = d3.axisRight(yScale).tickSizeInner(0);
 
     let element = 'g#' + id;
@@ -174,7 +175,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .attr("y", function (d) { return yScale(d); })
         .attr("width", function (d) { return xScale(freq[d]) })
         .attr("height", yScale.bandwidth())
-        .style('fill', "#b07aa1")
+        .attr("class","barChartRect")
         .on('mouseover', mouseoverFunc)
         .on('mousemove', mousemoveFunc)
         .on('mouseout', mouseoutFunc)
@@ -187,15 +188,21 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     let y = g.append('g')
         .attr('id', yname)
-        .attr('transform', `translate(${margin.left}, ${0})`)
+        .attr("class","yaxisBar")
+        .attr('transform', `translate(35,0)`)
         .call(yAxis);
 
-    y.selectAll(".tick text").attr("fill", "black").attr('font-size', '10px');
+    y.selectAll(".tick text")
+    .attr("fill", "black")
+    .attr('font-size', '12px');
+
+    x.selectAll(".tick text")
+    .attr("fill", "black")
+    .attr('font-size', '12px');
 
     g.append("text")
         .attr("id", "label-y")
-        .attr("class", "x-label")
-        .attr("fill", 'gray')
+        .attr("class", "labelBar")
         .attr("text-anchor", "middle")
         .attr("x", width/2)
         .attr("y", margin.top/2)
@@ -203,12 +210,11 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     g.append('text')
         .attr("id", "label-x")
-        .attr("class", "y-label")
-        .attr("fill", 'gray')
+        .attr("class", "labelBar")
         .attr('transform', 'rotate(-90)')
         .attr("text-anchor", "middle")
-        .attr("x", -width/2)
-        .attr("y", 15)
+        .attr("x", -height/2)
+        .attr("y", 20)
         .text(xlabel);
 
 }
