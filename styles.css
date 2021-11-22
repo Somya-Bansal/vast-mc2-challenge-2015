@@ -29,7 +29,12 @@ input[type=checkbox] {
     color: #F1FAEE;
     /* Error - #ae2012 */
     color: #ae2012;
-}
+}  
+  
+.highlightedBar {  
+    stroke-width: 2px;
+    stroke: rgb(0, 247, 255)
+  }
 
 div.tooltip {
     position: absolute;
@@ -44,11 +49,11 @@ div.tooltip {
 }
 
 .sourcenode {
-    fill: green;
+    fill: #0a9396;
 }
 
 .targetnode {
-    fill: red;
+    fill: #ee9b00;
 }
 
 .node {
