@@ -3,9 +3,6 @@
 fri_data = [];
 sat_data = [];
 sun_data = [];
-// fridata = [];
-// satdata = [];
-// sundata = [];
 
 // Use these vars to identify changes to user ID across charts
 var selected_userID=null;
@@ -57,12 +54,12 @@ document.addEventListener('change',function(){
 });
 
 function userInputs(){
-    var wknd = document.getElementById('weekend-day-select').value;
-    var loc = document.getElementById('location-select').value;
-    var outliers = document.getElementById('outliers').checked;
-    var extcomm = document.getElementById('extcomm').checked;
+    var day = document.getElementById('weekend-day-select').value;
+    var location = document.getElementById('location-select').value;
+    var outlier_flag = document.getElementById('outliers').checked;
+    var external_flag = document.getElementById('extcomm').checked;
 
-    return [wknd, loc, outliers, extcomm];
+    return [day, location, outlier_flag, external_flag];
 }
 
 function updateCharts(){

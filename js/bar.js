@@ -254,6 +254,7 @@ function mouseclickFunc(event, d){
             .duration('50')
             .style("opacity", 0);
         }
+
         selected_frame = this;
     
         d3.select(this)
@@ -265,21 +266,13 @@ function mouseclickFunc(event, d){
     
 }
 function mouseoutFunc(event, d){
-    if (selected_frame == null){
+    if (selected_frame == null || this != selected_frame){
         d3.select(this)
           .classed("highlightedBar",false);
         //Makes the new div disappear:
         ttdiv.transition()
         .duration('50')
         .style("opacity", 0);
-    }
-    else if(this!=selected_frame){
-        d3.select(this)
-    .classed("highlightedBar",false);
-    //Makes the new div disappear:
-    ttdiv.transition()
-    .duration('50')
-    .style("opacity", 0);
     }
 }
 
