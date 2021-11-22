@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', function () {
             
 		});
 
-	const allCsvFiles = [
-		d3.csv('data/comm-data-Fri.csv'),
-		d3.csv('data/comm-data-Sat.csv'),
-		d3.csv('data/comm-data-Sun.csv'),
-	];
+	// const allCsvFiles = [
+	// 	d3.csv('data/comm-data-Fri.csv'),
+	// 	d3.csv('data/comm-data-Sat.csv'),
+	// 	d3.csv('data/comm-data-Sun.csv'),
+	// ];
 	// Promise.all(allCsvFiles).then((values) => {
 	// 	friData = values[0];
 	// 	satData = values[1];
