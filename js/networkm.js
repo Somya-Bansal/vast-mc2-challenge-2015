@@ -1,20 +1,22 @@
-function adjacencyList(day) {
+function adjacencyList(day, loc) {
+    var location = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
     var adjacencyList = new Map();
     var day_data;
     
     // No impl for all days selection
     switch (day) {
         case "2":
-            day_data = fri_data;
+            day_data = fri_data.filter(d => loc == 1 ? d : d.Location == location[loc-1]);
             break;
         case "3":
-            day_data = sat_data;
+            day_data = sat_data.filter(d => loc == 1 ? d : d.Location == location[loc-1]);
             break;
         case "4":
-            day_data = sun_data;
+            day_data = sun_data.filter(d => loc == 1 ? d : d.Location == location[loc-1]);
             break;
         default:
-            day_data = fri_data;
+            day_data = (fri_data.concat(sat_data)).concat(sun_data);
+            day_data = day_data.filter(d => loc == 1 ? d : d.Location == location[loc-1])
             break;
     }
 
@@ -74,6 +76,9 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
             // Add nodes and links corresponding to the topz most communicated with ids
             if (val2[0] != -1) {
                 var iter3 = adjList.get(val2[0]);
+                if(iter3 === undefined)
+                    continue;
+
                 iter3 = iter3.entries();
                 for (var z = 0; z < topz; z++) {
                     var val3 = iter3.next().value;
@@ -98,6 +103,7 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
 function drawNetworkM() {
     // Grab day selection and tooltip
     var day = d3.select("#weekend-day-select").property("value");
+    var loc = d3.select("#location-select").property("value");
     var ttdiv;
     if (d3.select(".tooltip").empty())
         ttdiv = d3.select('body').append('div').attr('class', 'tooltip').style('opacity', 0);
@@ -105,7 +111,7 @@ function drawNetworkM() {
         ttdiv = d3.select(".tooltip");
 
     // Create adjacency list and network, params to network function change the amount of nodes added
-    var adjList = adjacencyList(day);
+    var adjList = adjacencyList(day, loc);
     var ndata = topXNetworkMaker(adjList, 10, 4, 3);
 
     // Add links and nodes
@@ -145,7 +151,12 @@ function drawNetworkM() {
         })
         .on('mousemove', function (e, d) {
             let cn = d.name > 0 ? d.name : "external";
-            let ca = d.name > 0 ? adjList.get(d.name).size : 0;
+            let ca = 0;
+            if(d.name > 0) {
+                if(!adjList.get(d.name).size === undefined) {
+                    ca = adjList.get(d.name).size;
+                }
+            }
             ttdiv.html("id: " + cn + "<br>unique receivers: " + ca)
                 .style('left', (e.pageX + 15) + 'px')
                 .style('top', (e.pageY - 40) + 'px');
