@@ -219,9 +219,11 @@ function mouseoverFunc(event, d){
            .duration(50)
            .style("opacity", 1);
     if (d == -1){
-        d = 'external';
+        var userid = 'external';
+    }else{
+        userid=d;
     }
-    ttdiv.html("User ID: " +d+"<br/>Frequency: "+ data[0][d])
+    ttdiv.html("User ID: " +userid+"<br/>Frequency: "+ data[0][d])
     .style("left", (event.pageX + 10) + "px")
     .style("top", (event.pageY - 15) + "px");
 
@@ -232,31 +234,44 @@ function mouseclickFunc(event, d){
     selected_userID = d;
     commType = data[1];
 
-    if (selected_frame != null){
+    if (selected_frame==this){
         d3.select(selected_frame)
-    .classed("highlightedBar",false);
-    //Makes the new div disappear:
-    ttdiv.transition()
-    .duration('50')
-    .style("opacity", 0);
-    }
-
-    selected_frame = this;
-
-    d3.select(this)
-        .classed("highlightedBar",true);
+          .classed("highlightedBar",false);
+    
         ttdiv.transition()
-           .duration(50)
-           .style("opacity", 1);
+        .duration('50')
+        .style("opacity", 0);
+        selected_frame = null;
+        selected_userID = null;
+        commType = null;
+    }
+    else{
+        if (selected_frame != null){
+            d3.select(selected_frame)
+              .classed("highlightedBar",false);
+        
+            ttdiv.transition()
+            .duration('50')
+            .style("opacity", 0);
+        }
+        selected_frame = this;
+    
+        d3.select(this)
+            .classed("highlightedBar",true);
+            ttdiv.transition()
+               .duration(50)
+               .style("opacity", 1);
+    }
+    
 }
 function mouseoutFunc(event, d){
     if (selected_frame == null){
         d3.select(this)
-    .classed("highlightedBar",false);
-    //Makes the new div disappear:
-    ttdiv.transition()
-    .duration('50')
-    .style("opacity", 0);
+          .classed("highlightedBar",false);
+        //Makes the new div disappear:
+        ttdiv.transition()
+        .duration('50')
+        .style("opacity", 0);
     }
     else if(this!=selected_frame){
         d3.select(this)
