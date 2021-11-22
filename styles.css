@@ -30,3 +30,23 @@ input[type=checkbox] {
     /* Error - #ae2012 */
     color: #ae2012;
 }
+
+#visbar{
+    background-color: rgb(255, 255, 255);
+}
+div.tooltip-cmap {
+    position: absolute;
+    text-align: left;
+    padding: .52rem;
+    background: #FFFFFF;
+    color: #313639;
+    border: 0.1px solid #313639;
+    border-radius: 5px;
+    pointer-events: none;
+    font-size: 1rem;
+  }
+  
+  .highlightedBar {  
+    stroke-width: 2px;
+    stroke: rgb(0, 247, 255)
+  }
