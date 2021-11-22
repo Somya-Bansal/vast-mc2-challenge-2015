@@ -3,7 +3,7 @@
 fri_data = [];
 sat_data = [];
 sun_data = [];
-
+all_days = [];
 // Use these vars to identify changes to user ID across charts
 var selected_userID=null;
 var commType=null;
@@ -14,10 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		const df = isNaN(+d.from) ? -1 : +d.from;
 		const dt = isNaN(+d.to) ? -1 : +d.to;
 		return {
-			Timestamp: new Date(d.Timestamp),
-			SenderId: df,
-			ReceiverId: dt,
-			Location: d.location
+			Timestamp_network: new Date(d.Timestamp),
+			SenderId_network: df,
+			ReceiverId_network: dt,
+			Location: d.location,
+			Timestamp: d.Timestamp,
+			SenderId: d.from,
+			ReceiverId: d.to
 		}
 	}
     var inputs = userInputs();
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			fri_data = values[0];
 			sat_data = values[1];
 			sun_data = values[2];
-            
+            // console.log(typeof(fri_data));
             drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
 			drawLineChart(fri_data, sat_data, sun_data);
 			drawNetworkM(fri_data, sat_data, sun_data);
@@ -40,13 +43,15 @@ document.addEventListener('DOMContentLoaded', function () {
 		d3.csv('data/comm-data-Sat.csv'),
 		d3.csv('data/comm-data-Sun.csv'),
 	];
-	Promise.all(allCsvFiles).then((values) => {
-		friData = values[0];
-		satData = values[1];
-		sunData = values[2];
-		drawInnovativeChart(friData, satData, sunData);
-		drawHeatmap(friData, satData, sunData);
-	});
+	// Promise.all(allCsvFiles).then((values) => {
+	// 	friData = values[0];
+	// 	satData = values[1];
+	// 	sunData = values[2];
+	// 	drawInnovativeChart(friData, satData, sunData);
+	// 	drawHeatmap(friData, satData, sunData);
+	// });
+	drawInnovativeChart(fri_data, sat_data, sun_data);
+	drawHeatmap(fri_data, sat_data, sun_data);
 });
 
 document.addEventListener('change',function(){
@@ -67,6 +72,6 @@ function updateCharts(){
   drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
   drawLineChart(fri_data, sat_data, sun_data);
   drawNetworkM(fri_data, sat_data, sun_data);
-  drawInnovativeChart(friData, satData, sunData)
-  drawHeatmap(friData, satData, sunData);
+  drawInnovativeChart(fri_data, sat_data, sun_data);
+  drawHeatmap(fri_data, sat_data, sun_data);
 }
