@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		satData = values[1];
 		sunData = values[2];
 		drawInnovativeChart(friData, satData, sunData);
+		drawHeatmap(friData, satData, sunData);
 	});
 });
 
@@ -44,5 +45,6 @@ function updateForDay() {
 	drawLineChart(fri_data, sat_data, sun_data);
 	drawNetworkM(fri_data, sat_data, sun_data);
 	drawInnovativeChart(friData, satData, sunData)
+	drawHeatmap(friData, satData, sunData);
 }
 
