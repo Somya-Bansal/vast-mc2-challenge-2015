@@ -1,72 +1,75 @@
 // Main js script
 // call all charts from here
+fri_data = [];
+sat_data = [];
+sun_data = [];
+// fridata = [];
+// satdata = [];
+// sundata = [];
 
-var barSvg;
-var wknd;
-var loc;
-var outliers;
-var extcomm;
-var div;
+// Use these vars to identify changes to user ID across charts
 var selected_userID=null;
 var commType=null;
-var fridata=[];
-var saturdata=[];
-var sundata=[];
 
-document.addEventListener('DOMContentLoaded', function() {
+// This function is called once the HTML page is fully loaded by the browser
+document.addEventListener('DOMContentLoaded', function () {
+	var rowConverter = function (d) {
+		const df = isNaN(+d.from) ? -1 : +d.from;
+		const dt = isNaN(+d.to) ? -1 : +d.to;
+		return {
+			Timestamp: new Date(d.Timestamp),
+			SenderId: df,
+			ReceiverId: dt,
+			Location: d.location
+		}
+	}
+    var inputs = userInputs();
+	Promise.all([d3.csv('data/comm-data-Fri.csv', rowConverter),
+                 d3.csv('data/comm-data-Sat.csv', rowConverter),
+                 d3.csv('data/comm-data-Sun.csv', rowConverter)])
+		.then(function (values) {
+			fri_data = values[0];
+			sat_data = values[1];
+			sun_data = values[2];
+            
+            drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
+			drawLineChart(fri_data, sat_data, sun_data);
+			drawNetworkM(fri_data, sat_data, sun_data);
+            
+		});
 
-    barSvg = d3.select('#barchart');
-    barSvg2 = d3.select('#barchart2');
-    // barWidth = +barSvg.style('width').replace('px','');
-    // barHeight = +barSvg.style('height').replace('px','');;
-    // barInnerWidth = barWidth - barMargin.left - barMargin.right;
-    // barInnerHeight = barHeight - barMargin.top - barMargin.bottom;
+	const allCsvFiles = [
+		d3.csv('data/comm-data-Fri.csv'),
+		d3.csv('data/comm-data-Sat.csv'),
+		d3.csv('data/comm-data-Sun.csv'),
+	];
+	Promise.all(allCsvFiles).then((values) => {
+		friData = values[0];
+		satData = values[1];
+		sunData = values[2];
+		drawInnovativeChart(friData, satData, sunData);
+		drawHeatmap(friData, satData, sunData);
+	});
+});
 
-    var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
-    var rowConverter = function (d) {
-        const df = isNaN(+d.from) ? -1 : +d.from;
-        const dt = isNaN(+d.to) ? -1 : +d.to;
-        return {
-            Timestamp: parseTime(d.Timestamp),
-            SenderId: df,
-            ReceiverId: dt,
-            Location: d.location
-        }
-    }
-    
-    div = d3.select("body").append("div")
-    .attr("class", "tooltip-cmap")
-    .style("opacity", 0);
+document.addEventListener('change',function(){
+    updateCharts();
+});
 
-    Promise.all([
-                d3.csv('data/comm-data-Fri.csv',
-                        rowConverter
-                        ),
-                d3.csv('data/comm-data-Sat.csv',
-                        rowConverter
-                        ),
-                d3.csv('data/comm-data-Sun.csv',
-                        rowConverter
-                        )
-                ])
-            .then(function(values){
-        
-            fridata=values[0];
-            saturdata=values[1];
-            sundata=values[2];
-            render_chart();
-    })
-    
-  });
+function userInputs(){
+    var wknd = document.getElementById('weekend-day-select').value;
+    var loc = document.getElementById('location-select').value;
+    var outliers = document.getElementById('outliers').checked;
+    var extcomm = document.getElementById('extcomm').checked;
 
-  document.addEventListener('change',function(){
-      render_chart();
-  });
+    return [wknd, loc, outliers, extcomm];
+}
 
-function render_chart(){
-    wknd = document.getElementById('weekend-day-select').value;
-    loc = document.getElementById('location-select').value;
-    outliers = document.getElementById('outliers').checked;
-    extcomm = document.getElementById('extcomm').checked;
-    drawBar(wknd, loc, outliers, extcomm);
-} 
+function updateCharts(){
+  var inputs = userInputs();
+  drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
+  drawLineChart(fri_data, sat_data, sun_data);
+  drawNetworkM(fri_data, sat_data, sun_data);
+  drawInnovativeChart(friData, satData, sunData)
+  drawHeatmap(friData, satData, sunData);
+}

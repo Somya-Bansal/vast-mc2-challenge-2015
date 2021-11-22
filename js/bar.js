@@ -3,6 +3,11 @@ var ReceiverId_freq={};
 var SenderId_freq={};
 var selected_frame = null;
 
+var barSvg;
+var barSvg2;
+
+var ttdiv;
+
 function computeStats(arr, Nstdev=1){
 
     sum = arr.reduce((a,b)=>a+b,0)
@@ -21,21 +26,24 @@ function computeStats(arr, Nstdev=1){
 
 function drawBar(day, loc, outlier_flag, extcomm_flag){
 
+    barSvg = d3.select('#barchart');
+    barSvg2 = d3.select('#barchart2');
+
     switch (day) {
         case "1":
-            day_data = Array.prototype.concat(fridata,saturdata,sundata);
+            day_data = Array.prototype.concat(fri_data,sat_data,sun_data);
             break;
         case "2":
-            day_data = fridata;
+            day_data = fri_data;
             break;
         case "3":
-            day_data = saturdata;
+            day_data = sat_data;
             break;
         case "4":
-            day_data = sundata;
+            day_data = sun_data;
             break;
         default:
-            day_data = fridata;
+            day_data = fri_data;
             break;
     }    
     var loc_;
@@ -59,7 +67,7 @@ function drawBar(day, loc, outlier_flag, extcomm_flag){
             loc_ = "Coaster Alley";
             break;
         default:
-            loc_ = "Entry Corridor";
+            loc_ = "All";
             break;
     }
 
@@ -111,6 +119,11 @@ function drawBar(day, loc, outlier_flag, extcomm_flag){
     barchart(sIds, SenderId_freq, barSvg, 'barchart', ylabel='Sender ID', xlabel='Frequency');
     barchart(rIds, ReceiverId_freq, barSvg2, 'barchart2', ylabel='Receiver ID', xlabel='Frequency' )
 
+    if (d3.select(".tooltip").empty())
+    ttdiv = d3.select('body').append('div').attr('class', 'tooltip').style('opacity', 0);
+    else
+    ttdiv = d3.select(".tooltip");
+
 }
 
 function barchart(data, freq, svgelement, id, xlabel='', ylabel=''){
@@ -124,7 +137,7 @@ function barchart(data, freq, svgelement, id, xlabel='', ylabel=''){
 
     yScale = d3.scaleBand()
                 .domain(data)
-                .range([yoffset,500]).padding(0.1);
+                .range([yoffset,480]).padding(0.1);
 
     xAxis = d3.axisTop(xScale).tickSizeOuter(0);
     yAxis = d3.axisRight(yScale).tickSizeInner(0);
@@ -197,23 +210,23 @@ function getfreqData(id){
     }
 }
 
-function mouseoverFunc(d){
+function mouseoverFunc(event, d){
     var data;
     data = getfreqData(d3.select(this).attr('id'));
     d3.select(this)
         .classed("highlightedBar",true);
-        div.transition()
+        ttdiv.transition()
            .duration(50)
            .style("opacity", 1);
     if (d == -1){
         d = 'external';
     }
-    div.html("User ID: " +d+"<br/>Frequency: "+ data[0][d])
-    .style("left", (d3.event.pageX + 10) + "px")
-    .style("top", (d3.event.pageY - 15) + "px");
+    ttdiv.html("User ID: " +d+"<br/>Frequency: "+ data[0][d])
+    .style("left", (event.pageX + 10) + "px")
+    .style("top", (event.pageY - 15) + "px");
 
 }
-function mouseclickFunc(d){
+function mouseclickFunc(event, d){
     var data;
     data = getfreqData(d3.select(this).attr('id'));
     selected_userID = d;
@@ -223,7 +236,7 @@ function mouseclickFunc(d){
         d3.select(selected_frame)
     .classed("highlightedBar",false);
     //Makes the new div disappear:
-    div.transition()
+    ttdiv.transition()
     .duration('50')
     .style("opacity", 0);
     }
@@ -232,16 +245,16 @@ function mouseclickFunc(d){
 
     d3.select(this)
         .classed("highlightedBar",true);
-        div.transition()
+        ttdiv.transition()
            .duration(50)
            .style("opacity", 1);
 }
-function mouseoutFunc(d){
+function mouseoutFunc(event, d){
     if (selected_frame == null){
         d3.select(this)
     .classed("highlightedBar",false);
     //Makes the new div disappear:
-    div.transition()
+    ttdiv.transition()
     .duration('50')
     .style("opacity", 0);
     }
@@ -249,14 +262,14 @@ function mouseoutFunc(d){
         d3.select(this)
     .classed("highlightedBar",false);
     //Makes the new div disappear:
-    div.transition()
+    ttdiv.transition()
     .duration('50')
     .style("opacity", 0);
     }
 }
 
-function mousemoveFunc(d){
+function mousemoveFunc(event, d){
 
-      div.style('left', (d3.event.pageX+10) + 'px')
-         .style('top', (d3.event.pageY+10) + 'px')
+      ttdiv.style('left', (event.pageX+10) + 'px')
+         .style('top', (event.pageY+10) + 'px')
 }
