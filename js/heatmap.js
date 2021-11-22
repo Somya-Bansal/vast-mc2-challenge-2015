@@ -35,8 +35,8 @@ function drawHeatmap(friData, satData, sunData) {
         dataToShow,
         // .filter((it) => new Date(it.Timestamp).getHours() <= 24),
         (d) => d.length,
-        (d) => d.location,
-        (d) => (new Date(d.Timestamp).getHours() - 1),
+        (d) => d.Location,
+        (d) => (d.Timestamp_network.getHours() - 1),
     );
     let data = []
 

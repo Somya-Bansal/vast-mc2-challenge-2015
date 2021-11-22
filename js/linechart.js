@@ -1,5 +1,6 @@
 function frequencyAnalyzer(arr, interval) {
     var frequency;
+    console.log(interval)
     switch (interval) {
         case "hour":
             frequency = new Array(24)
@@ -7,7 +8,7 @@ function frequencyAnalyzer(arr, interval) {
                 frequency[i] = 0;
 
             function hoursplit(ts) {
-                frequency[ts.Timestamp.getHours() - 1]++;
+                frequency[ts.Timestamp_network.getHours() - 1]++;
             }
             arr.map(hoursplit);
             break;
@@ -17,7 +18,7 @@ function frequencyAnalyzer(arr, interval) {
                 frequency[i] = 0;
 
             function quartersplit(ts) {
-                frequency[(ts.Timestamp.getHours() * 4) + (Math.floor(ts.Timestamp.getMinutes() / 15)) - 1]++;
+                frequency[(ts.Timestamp_network.getHours() * 4) + (Math.floor(ts.Timestamp_network.getMinutes() / 15)) - 1]++;
             }
             arr.map(quartersplit);
             break;
@@ -27,7 +28,7 @@ function frequencyAnalyzer(arr, interval) {
                 frequency[i] = 0;
 
             function halfsplit(ts) {
-                frequency[(ts.Timestamp.getHours() * 2) + (Math.floor(ts.Timestamp.getMinutes() / 30)) - 1]++;
+                frequency[(ts.Timestamp_network.getHours() * 2) + (Math.floor(ts.Timestamp_network.getMinutes() / 30)) - 1]++;
             }
             arr.map(halfsplit);
             break;
@@ -37,7 +38,7 @@ function frequencyAnalyzer(arr, interval) {
                 frequency[i] = 0;
 
             function hoursplit(ts) {
-                frequency[ts.Timestamp.getHours() - 1]++;
+                frequency[ts.Timestamp_network.getHours() - 1]++;
             }
             arr.map(hoursplit);
             break;
@@ -67,7 +68,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     // Grab from elements
     var day = d3.select("#weekend-day-select").property("value");
     var loc = d3.select("#location-select").property("value");
-    var interval = "hour";
+    let interval = "hour";
 
     const width = 1000
     const height = 600

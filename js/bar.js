@@ -80,7 +80,7 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
     // filter on extcomm flag here
     if (!extcomm_flag) {
         day_data = day_data.filter((d) => {
-            return d.ReceiverId !== -1;
+            return d.ReceiverId_network !== -1;
         })
     }
 
@@ -90,20 +90,20 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
     var rIds = [];
 
     day_data.forEach(d => {
-        if (d.ReceiverId in ReceiverId_freq) {
-            ReceiverId_freq[d.ReceiverId] += 1
+        if (d.ReceiverId_network in ReceiverId_freq) {
+            ReceiverId_freq[d.ReceiverId_network] += 1
         }
         else {
-            ReceiverId_freq[d.ReceiverId] = 1
-            rIds.push(parseInt(d.ReceiverId));
+            ReceiverId_freq[d.ReceiverId_network] = 1
+            rIds.push(parseInt(d.ReceiverId_network));
         }
 
-        if (d.SenderId in SenderId_freq) {
-            SenderId_freq[d.SenderId] += 1
+        if (d.SenderId_network in SenderId_freq) {
+            SenderId_freq[d.SenderId_network] += 1
         }
         else {
-            SenderId_freq[d.SenderId] = 1
-            sIds.push(parseInt(d.SenderId));
+            SenderId_freq[d.SenderId_network] = 1
+            sIds.push(parseInt(d.SenderId_network));
         }
     })
 

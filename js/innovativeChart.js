@@ -32,8 +32,8 @@ function drawInnovativeChart(friData, satData, sunData) {
     res = d3.rollup(
         dataToShow.filter((it) => new Date(it.Timestamp).getHours() <= 24),
         (d) => d.length,
-        (d) => d.location,
-        (d) => d.from
+        (d) => d.Location,
+        (d) => d.SenderId
     );
     console.log(res);
 
