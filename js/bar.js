@@ -129,7 +129,7 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
 function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
 
-    const width = 500
+    const width = 700
     const height = 700
     const margin = {
         top: 50,
@@ -145,7 +145,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     xScale = d3.scaleLinear()
         .domain([0, freq[data[0]]])
-        .range([margin.left, margin.left + width]);
+        .range([margin.left, margin.left + innerWidth]);
 
     yScale = d3.scaleBand()
         .domain(data)

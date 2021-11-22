@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
             drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
 			drawLineChart(fri_data, sat_data, sun_data);
 			drawNetworkM(fri_data, sat_data, sun_data);
-            
+			drawInnovativeChart(fri_data, sat_data, sun_data);
+			drawHeatmap(fri_data, sat_data, sun_data);
 		});
 
 	// const allCsvFiles = [
@@ -50,8 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	// 	drawInnovativeChart(friData, satData, sunData);
 	// 	drawHeatmap(friData, satData, sunData);
 	// });
-	drawInnovativeChart(fri_data, sat_data, sun_data);
-	drawHeatmap(fri_data, sat_data, sun_data);
+	// drawInnovativeChart(fri_data, sat_data, sun_data);
+	// drawHeatmap(fri_data, sat_data, sun_data);
 });
 
 document.addEventListener('change',function(){
