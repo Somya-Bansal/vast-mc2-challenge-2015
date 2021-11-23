@@ -26,8 +26,11 @@ function computeStats(arr, Nstdev = 1) {
 
 function drawBar(day, loc, outlier_flag, extcomm_flag) {
 
+    
     barSvg = d3.select('#barchart');
     barSvg2 = d3.select('#barchart2');
+    barSvg.selectAll("*").remove();
+    barSvg2.selectAll("*").remove();
 
     switch (day) {
         case "1":
@@ -132,7 +135,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     const width = 700
     const height = 700
     const margin = {
-        top: 50,
+        top: 60,
         right: 10,
         bottom: 10,
         left: 90
@@ -140,27 +143,27 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     const innerHeight = height - margin.top - margin.bottom
     const innerWidth = width - margin.left - margin.right
 
-    // let xoffset = 25;
-    let yoffset = 50;
-
+    console.log(freq[data[0]])
     xScale = d3.scaleLinear()
         .domain([0, freq[data[0]]])
-        .range([margin.left, margin.left + innerWidth]);
+        .range([margin.left, margin.left+innerWidth]);
 
     yScale = d3.scaleBand()
         .domain(data)
-        .range([margin.top, margin.top + innerHeight]).padding(0.3);
+        .range([margin.top, margin.top + innerHeight])
+        .padding(0.3);
 
     xAxis = d3.axisTop(xScale)
     // .tickSizeOuter(0);
-    yAxis = d3.axisRight(yScale).tickSizeInner(0);
+    yAxis = d3.axisRight(yScale)
+    .tickSizeInner(0);
 
-    let element = 'g#' + id;
+    // let element = 'g#' + id;
     let xname = 'g#xscale_' + id;
     let yname = 'g#yscale_' + id;
-    svgelement.selectAll(element).remove();
-    svgelement.selectAll(xname).remove();
-    svgelement.selectAll(yname).remove();
+    // svgelement.selectAll(element).remove();
+    // svgelement.selectAll(xname).remove();
+    // svgelement.selectAll(yname).remove();
 
     let g = svgelement
         .append('g')
@@ -171,9 +174,9 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .enter()
         .append("rect")
         .attr('id', id)
-        .attr("x", xScale(0))
+        .attr("x", margin.left)
         .attr("y", function (d) { return yScale(d); })
-        .attr("width", function (d) { return xScale(freq[d]) })
+        .attr("width", function (d) { return xScale(freq[d])-margin.left })
         .attr("height", yScale.bandwidth())
         .attr("class","barChartRect")
         .on('mouseover', mouseoverFunc)
@@ -183,7 +186,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     let x = g.append('g')
         .attr('id', xname)
-        .attr('transform', `translate(${0}, ${margin.top})`)
+        .attr('transform', `translate(0, ${margin.top})`)
         .call(xAxis);
 
     let y = g.append('g')
@@ -205,7 +208,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .attr("class", "labelBar")
         .attr("text-anchor", "middle")
         .attr("x", width/2)
-        .attr("y", margin.top/2)
+        .attr("y", margin.top/2-5)
         .text(ylabel);
 
     g.append('text')
