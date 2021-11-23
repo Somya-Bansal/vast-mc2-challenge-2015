@@ -147,6 +147,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
     svg.append("text")
         .attr("text-anchor", "middle")
+        .attr("class", "labelBar")
         .attr("x", (width + 100) / 2)
         .attr("y", innerHeight + 60)
         .text("Time");
@@ -171,6 +172,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         .attr("x", -height / 2)
         .attr("y", 30)
         .attr("dy", ".75em")
+        .attr("class", "labelBar")
         .attr("transform", "rotate(-90)")
         .text("Amount of Communications");
 

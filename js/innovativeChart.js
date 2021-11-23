@@ -49,7 +49,7 @@ function drawInnovativeChart(friData, satData, sunData) {
 
     innovativeSvg
         .attr("viewBox", `-${innerWidth / 2} -${innerHeight / 2} ${innerWidth} ${innerHeight}`)
-        .style("margin", "0 130px")
+        // .style("margin", "0 130px")
         .style("cursor", "pointer")
         .on("click", (event) => zoom(event, root));
 
