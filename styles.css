@@ -2,7 +2,7 @@ body {
     font-family: rubik, Helvetica, Arial, sans-serif;
 }
 .navStyles{
-    background-color:rgba(241, 249, 246, 0.8);
+    background-color:rgba(241, 249, 246, 0.9);
     /* background-color:#F1F9F6; */
     align-items: center;
     box-shadow: 1px -12px 28px #313639;
@@ -46,7 +46,8 @@ input[type=checkbox] {
 }  
   
 .highlightedBar {  
-    stroke-width: 2.5px;
+    stroke: #ca6702;
+    stroke-width: 2px;
   }
 
 div.tooltip {
@@ -74,7 +75,6 @@ div.tooltip {
 }
 .barChartRect{
     fill:rgba(238,155,0,0.5);
-    stroke: #ca6702;
 }
 .yaxisBar .domain{
     stroke: none;
