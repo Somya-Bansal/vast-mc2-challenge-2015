@@ -12,9 +12,20 @@ function drawInnovativeChart(friData, satData, sunData) {
         case "4":
             dataToShow = sunData;
             break;
-        // case "1":
-        //     dataToShow = AllData;
+        case "1":
+            dataToShow = Array.prototype.concat(friData, satData, sunData);
+            break;
     }
+    const locationMap = {
+        1: "All Locations",
+        2: "Entry Corridor",
+        3: "Kiddie Land",
+        4: "Tundra Land",
+        5: "Wet Land",
+        6: "Coaster Alley"
+    }
+
+    let locationByUser = d3.select("#location-select").property("value");
 
     let innovativeSvg = d3.select("#visInnovative");
     innovativeSvg.selectAll("*").remove();
@@ -28,7 +39,9 @@ function drawInnovativeChart(friData, satData, sunData) {
         dataToShow.filter((it) => new Date(it.Timestamp).getHours() <= 24),
         (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,
-        (d) => d.SenderId
+        // TODO: How to count both sender and receiver data
+        // (d) => d.SenderId,
+        (d) =>d.ReceiverId,
     );
     // console.log(res);
 
@@ -48,12 +61,15 @@ function drawInnovativeChart(friData, satData, sunData) {
         .on("click", (event) => zoom(event, root));
 
     const node = innovativeSvg.append("g")
-        .style("border","red")
+        .style("border", "red")
         .selectAll("circle")
         .data(root.descendants().slice(1))
         .join("circle")
         .style("fill", (d) => d.parent.data[0] == null ? "white" : colorScale(d.parent.data[0]))
-        .attr('opacity', '0.6')
+        .attr('opacity', (d) => {
+            if (locationMap[locationByUser] === "All Locations") return 0.6
+            return d.parent.data[0] == locationMap[locationByUser] ? "1" : '0.3'
+        })
         .on('mouseover', mouseover)
         .on('mouseout', mouseout)
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
@@ -91,37 +107,14 @@ function drawInnovativeChart(friData, satData, sunData) {
             // .duration(event.altKey ? 7500 : 750)
             .tween("zoom", d => {
                 const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
-                console.log(i)
+                // console.log(i)
                 return t => {
-                    console.log(t)
-                    return zoomTo(i(t))};
+                    // console.log(t)
+                    return zoomTo(i(t))
+                };
             });
 
-        // label
-        //     .filter(function (d) { return d.parent === focus || this.style.display === "inline"; })
-        //     .transition(transition)
-        //     .style("fill-opacity", d => d.parent === focus ? 1 : 0)
-        //     .on("start", function (d) { if (d.parent === focus) this.style.display = "inline"; })
-        //     .on("end", function (d) { if (d.parent !== focus) this.style.display = "none"; });
     }
-
-    // innovativeSvg
-    //     .append('g')
-    //     .attr('pointer-events', 'none')
-    //     .attr('text-anchor', 'middle')
-    //     .selectAll('text')
-    //     .data(root.leaves().filter((d) => d.r > 2))
-    //     .join('text')
-    //     .attr('transform', (d) => `translate(${d.x},${d.y}) scale(${d.r / 30})`)
-    //     .selectAll('tspan')
-    //     .data((d) => {
-    //         // console.log(d.parent.data[0]);
-    //         return (d.data[0] + '').split(/\s+/g);
-    //     })
-    //     .join('tspan')
-    //     .attr('x', 0)
-    //     .attr('y', (d, i, nodes) => `${i - nodes.length / 2 + 0.8}em`)
-    //     .text((d) => d);
 
     // tooltip
     let tooltipDiv = d3.select("body").append("div")
@@ -140,11 +133,8 @@ function drawInnovativeChart(friData, satData, sunData) {
             Id: ${d['data'][0]} <br>  
             Count: ${d['value']}
         `)
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 15) + "px");
-        // d3.select(this)
-        // .style("stroke", "black")
-        // .style("opacity", 1)
+            .style("left", (event.pageX + 20) + "px")
+            .style("top", (event.pageY - 25) + "px");
     }
 
     function mouseout(event, d) {
@@ -152,9 +142,6 @@ function drawInnovativeChart(friData, satData, sunData) {
         tooltipDiv.transition()
             .duration(50)
             .style("opacity", 0);
-        // d3.select(this)
-        // .style("stroke", "none")
-        // .style("opacity", 0.8)
     }
     return innovativeSvg.node();
 

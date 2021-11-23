@@ -10,13 +10,13 @@ var ttdiv;
 
 function computeStats(arr, Nstdev = 1) {
 
-    sum = arr.reduce((a, b) => a + b, 0)
-    mean = (sum / arr.length) || 0;
-    stdev_num = 0
+    let sum = arr.reduce((a, b) => a + b, 0)
+    let mean = (sum / arr.length) || 0;
+    let stdev_num = 0
     arr.forEach((d) => {
         stdev_num = stdev_num + Math.pow(d - mean, 2)
     })
-    stdev = Math.sqrt(stdev_num / arr.length)
+    let stdev = Math.sqrt(stdev_num / arr.length)
 
     arr = arr.filter((d) => {
         return d <= stdev * Nstdev;

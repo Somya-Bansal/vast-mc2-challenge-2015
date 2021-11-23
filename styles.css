@@ -74,7 +74,7 @@ div.tooltip {
     fill: #005f73;
 }
 .barChartRect{
-    fill:rgba(238,155,0,0.5);
+    fill:rgba(238,155,0,0.6);
 }
 .yaxisBar .domain{
     stroke: none;
@@ -82,4 +82,9 @@ div.tooltip {
 .labelBar{
     fill:#005f73;
     font-size: 18px;
+}
+.heatmapLabel{
+    font-size: 20px;
+    stroke: #005f73;
+    fill: #005f73;
 }

@@ -12,8 +12,9 @@ function drawHeatmap(friData, satData, sunData) {
         case "4":
             dataToShow = sunData;
             break;
-        // case "1":
-        //     dataToShow = AllData;
+        case "1":
+            dataToShow = Array.prototype.concat(friData, satData, sunData);
+            break;
     }
 
     let heatmapSvg = d3.select("#visHeatmap")
@@ -68,7 +69,7 @@ function drawHeatmap(friData, satData, sunData) {
 
     heatmapSvg.append("text")
         .attr("text-anchor", "middle")
-        .attr("class", "x-axis-lable")
+        .attr("class", "heatmapLabel")
         .attr("x", (width + 100) / 2)
         .attr("y", innerHeight + 60)
         .text("Hour of the day");
@@ -79,15 +80,15 @@ function drawHeatmap(friData, satData, sunData) {
         .domain(locations)
         .padding(0.05);
     heatmapSvg.append("g")
-        .attr("transform", `translate(${margin.left}, 0)`)
+        .attr("transform", `translate(${margin.left + 20}, 0)`)
         .style("font-size", 15)
         .call(d3.axisLeft(y).tickSize(0))
         .select(".domain").remove()
     heatmapSvg.append("text")
         .attr("text-anchor", "middle")
-        .attr("class", "y-axis-lable")
+        .attr("class", "heatmapLabel")
         .attr("x", (-height / 2) + 25)
-        .attr("y", 0)
+        .attr("y", 10)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
         .text("Location");
