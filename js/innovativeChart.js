@@ -16,26 +16,21 @@ function drawInnovativeChart(friData, satData, sunData) {
         //     dataToShow = AllData;
     }
 
-
-    // selectedDayData = 
     let innovativeSvg = d3.select("#visInnovative");
     innovativeSvg.selectAll("*").remove();
     width = +innovativeSvg.style('width').replace('px', '');
     height = +innovativeSvg.style('height').replace('px', '');
-    const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-        innerWidth = width - margin.left - margin.right,
-        innerHeight = height - margin.top - margin.bottom;
 
     locations = ["Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"]
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(locations);
 
     res = d3.rollup(
         dataToShow.filter((it) => new Date(it.Timestamp).getHours() <= 24),
-        (d) => d.length,
+        (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,
         (d) => d.SenderId
     );
-    console.log(res);
+    // console.log(res);
 
     childrenAccessorFn = ([key, value]) => value.size && Array.from(value);
     hierarchyData = d3
@@ -48,24 +43,24 @@ function drawInnovativeChart(friData, satData, sunData) {
     let view;
 
     innovativeSvg
-        .attr("viewBox", `-${innerWidth / 2} -${innerHeight / 2} ${innerWidth} ${innerHeight}`)
-        // .style("margin", "0 130px")
+        .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
         .style("cursor", "pointer")
         .on("click", (event) => zoom(event, root));
 
     const node = innovativeSvg.append("g")
+        .style("border","red")
         .selectAll("circle")
-        .data(root.descendants().slice(2))
+        .data(root.descendants().slice(1))
         .join("circle")
-        .style("fill", (d) => d.parent.data[0] == null ? "#F1FAEE" : colorScale(d.parent.data[0]))
-        .attr('opacity', '0.5')
-        .on("mouseover", function () { d3.select(this).attr("stroke", "#000"); })
-        .on("mouseout", function () { d3.select(this).attr("stroke", null); })
+        .style("fill", (d) => d.parent.data[0] == null ? "white" : colorScale(d.parent.data[0]))
+        .attr('opacity', '0.6')
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout)
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
 
 
     const label = innovativeSvg.append("g")
-        .style("font", "10px sans-serif")
+        .style("font", "30px sans-serif")
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .selectAll("text")
@@ -73,7 +68,7 @@ function drawInnovativeChart(friData, satData, sunData) {
         .join("text")
         .style("fill-opacity", d => d.parent === root ? 1 : 0)
         .style("display", d => d.parent === root ? "inline" : "none")
-        .text(d => d.data[0]);
+        .text(d => d.parent === root ? d.data[0] : "");
 
     zoomTo([root.x, root.y, root.r * 2]);
 
@@ -93,21 +88,23 @@ function drawInnovativeChart(friData, satData, sunData) {
         focus = d;
 
         const transition = innovativeSvg.transition()
-            .duration(event.altKey ? 7500 : 750)
+            // .duration(event.altKey ? 7500 : 750)
             .tween("zoom", d => {
                 const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
-                return t => zoomTo(i(t));
+                console.log(i)
+                return t => {
+                    console.log(t)
+                    return zoomTo(i(t))};
             });
 
-        label
-            .filter(function (d) { return d.parent === focus || this.style.display === "inline"; })
-            .transition(transition)
-            .style("fill-opacity", d => d.parent === focus ? 1 : 0)
-            .on("start", function (d) { if (d.parent === focus) this.style.display = "inline"; })
-            .on("end", function (d) { if (d.parent !== focus) this.style.display = "none"; });
+        // label
+        //     .filter(function (d) { return d.parent === focus || this.style.display === "inline"; })
+        //     .transition(transition)
+        //     .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+        //     .on("start", function (d) { if (d.parent === focus) this.style.display = "inline"; })
+        //     .on("end", function (d) { if (d.parent !== focus) this.style.display = "none"; });
     }
 
-    return innovativeSvg.node();
     // innovativeSvg
     //     .append('g')
     //     .attr('pointer-events', 'none')
@@ -125,5 +122,41 @@ function drawInnovativeChart(friData, satData, sunData) {
     //     .attr('x', 0)
     //     .attr('y', (d, i, nodes) => `${i - nodes.length / 2 + 0.8}em`)
     //     .text((d) => d);
+
+    // tooltip
+    let tooltipDiv = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+
+    function mouseover(event, d) {
+        d3.select(this).attr("stroke", "#000");
+        tooltipDiv.transition()
+            .duration(50)
+            .style("opacity", 1)
+            .style("stroke", "black")
+        tooltipDiv.html(`
+            Location: ${d['parent']['data'][0] != null ? d['parent']['data'][0] : "Dino World"} <br> 
+            Id: ${d['data'][0]} <br>  
+            Count: ${d['value']}
+        `)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 15) + "px");
+        // d3.select(this)
+        // .style("stroke", "black")
+        // .style("opacity", 1)
+    }
+
+    function mouseout(event, d) {
+        d3.select(this).attr("stroke", null);
+        tooltipDiv.transition()
+            .duration(50)
+            .style("opacity", 0);
+        // d3.select(this)
+        // .style("stroke", "none")
+        // .style("opacity", 0.8)
+    }
+    return innovativeSvg.node();
+
 
 }
