@@ -128,8 +128,14 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     let ext = document.getElementById('extcomm').checked
     let outlier = document.getElementById('outliers').checked;
 
-    const width = 1000
-    const height = 600
+    var svg = d3.select("#svglinechart");
+    svg.selectAll("*").remove();
+
+    width = +svg.style('width').replace('px', '');
+    height = +svg.style('height').replace('px', '');
+
+    // const width = 1000
+    // const height = 600
     const margin = {
         top: 20,
         right: 30,
@@ -144,9 +150,6 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     var commType;
     [userID, commType] = selected.get_values;
     
-    var svg = d3.select("#svglinechart");
-    svg.selectAll("*").remove();
-
     // Calculate communication frequenices within chosen interval
     var frequency = [];
     switch (day) {
@@ -328,7 +331,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         .attr("transform", function(d,i) { return(`translate(${margin.left + 20},${margin.top + (margin.top*i)})`); });
 
     tagLegend.append("text").text(function (d, i) { return (i == 0 ? day_keys[d - 1] : i == 1 ? loc_keys[d - 1] : d); })
-        .attr("font-size", "12px");
+        // .attr("font-size", "12px");
 
     // Interactions
     // Interaction circle

@@ -9,7 +9,7 @@ body {
 }
 .chartContainer{
     align-items: center;
-    margin-top: 124px;
+    margin-top: 110px;
     width: 100%;
     flex-direction: column;
     display: flex;
@@ -30,13 +30,13 @@ input[type=checkbox] {
 /* color palette*/
 .colors {
 
-    /* Primary - #0a9396 */
+    /* Primary - #0a9396 - rgb(0, 95, 115) */ 
     color: #005f73;
-    /* Primary Varient - #005f73 */
+    /* Primary Varient - #005f73 - rgb(10, 147, 150)*/
     color: #0a9396;
-    /* Secondary - #ca6702 */
+    /* Secondary - #ca6702 - rgb(202, 103, 2) */
     color: #ca6702;
-    /* Secondary Variant - #ee9b00  */
+    /* Secondary Variant - #ee9b00 - rgb(238, 155, 0) */
     color: #ee9b00;
 
     /* Background - #F1FAEE  */
@@ -44,6 +44,29 @@ input[type=checkbox] {
     /* Error - #ae2012 */
     color: #ae2012;
 }  
+.barChartContainer{
+    padding: 24px;
+    background-color: rgba(202, 103, 2,0.05);
+}
+.lineChartContainer{
+    padding: 24px;
+    background-color: rgba(0, 95, 115,0.05);
+}
+.lineChartIntervalControl{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size  : 1.5em;
+    margin-bottom: 10px;
+    /* font-weight: 500; */
+    /* color: #ca6702; */
+}
+.lineChartIntervalControl select{
+    padding:2px;
+    border-radius: 6px;
+    border: 1px solid rgba(49, 54, 57, 0.4);
+    font-size: 18px;
+}
   
 .highlightedBar {  
     stroke: #ca6702;
@@ -100,4 +123,8 @@ div.tooltip {
     height: 18px;
     width:18px;
     margin-right: 8px;
+}
+.tagLegend{
+    font-size: 18px;
+    /* font-weight: 500; */
 }

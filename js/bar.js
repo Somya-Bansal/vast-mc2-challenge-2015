@@ -132,8 +132,8 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
 function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
 
-    const width = 700
-    const height = 700
+    const width = 600
+    const height = 600
     const margin = {
         top: 60,
         right: 10,

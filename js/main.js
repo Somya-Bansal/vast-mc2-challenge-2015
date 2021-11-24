@@ -55,6 +55,8 @@ document.addEventListener('change',(event) => {
 	const srcid = event.target.id
 	if(srcid == 'interval-select')
 		drawLineChart(fri_data, sat_data, sun_data)
+	else if(srcid == 'commRadioSender' || srcid == 'commRadioReceiver')
+		drawInnovativeChart(fri_data, sat_data, sun_data, userInputs());
 	else
     	updateCharts();
 });

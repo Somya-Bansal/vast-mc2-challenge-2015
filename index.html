@@ -58,33 +58,45 @@
   <div class="chartContainer">
 
     <!-- Chart SVGs -->
-    <div class="d-flex justify-content-center border border my-2">
+
+    <!-- Bar Chart -->
+    <div class="d-flex justify-content-center barChartContainer w-100">
       <div class="mx-3">
-        <svg id="barchart" width="700" height="700"></svg>
+        <svg id="barchart" width="600" height="600"></svg>
       </div>
       <div class="mx-3">
-        <svg id="barchart2" width="700" height="700"></svg>
+        <svg id="barchart2" width="600" height="600"></svg>
       </div>
     </div>
-    <div class="d-flex justify-content-center border" id="vislinechart">
-      <svg id="svglinechart" width="1000" height="600"></svg>
-      <select id="interval-select">
-        <option value="hour" selected="selected">Hour</option>
-        <option value="half">Half Hour</option>
-        <option value="quarter">Quarter Hour</option>
-      </select>
+
+    <!-- Line Chart -->
+    <div class="d-flex flex-column align-items-center w-100 lineChartContainer" id="vislinechart">
+      <div class="lineChartIntervalControl">
+        <!-- <label for="interval-select" class="inputLabel">Interval</label> -->
+        <span>Amount of Communication every</span>
+        <select class="ml-2" id="interval-select">
+          <option value="hour" selected="selected">Hour</option>
+          <option value="half">Half Hour</option>
+          <option value="quarter">Quarter Hour</option>
+        </select>
+      </div>
+      <svg id="svglinechart" width="1200" height="500"></svg>
     </div>
+
+    <!-- Network Chart -->
     <div class="d-flex justify-content-center border" id="visnetworkm">
       <svg id="svgnetworkm" width="1000" height="600"></svg>
     </div>
     <div class="d-flex justify-content-center flex-column border">
       <div class="d-flex justify-content-around chartControlContainer p-3">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="communicationTypeRadio" id="commRadioSender" value="sender" checked>
+          <input class="form-check-input" type="radio" name="communicationTypeRadio" id="commRadioSender" value="sender"
+            checked>
           <label class="form-check-label" for="inlineRadio1">Senders</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="communicationTypeRadio" id="commRadioReceiver" value="receiver">
+          <input class="form-check-input" type="radio" name="communicationTypeRadio" id="commRadioReceiver"
+            value="receiver">
           <label class="form-check-label" for="inlineRadio2">Receivers</label>
         </div>
       </div>
