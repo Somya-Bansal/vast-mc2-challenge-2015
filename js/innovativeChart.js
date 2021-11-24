@@ -50,7 +50,12 @@ function drawInnovativeChart(friData, satData, sunData, userInputs) {
 
     locations = ["Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"]
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(locations);
-
+    
+    // User ID and communication type
+    let userID;
+    let commType;
+    [userID, commType] = selected.get_values;
+    
     let innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
     res = d3.rollup(
         dataToShow.filter((it) => {

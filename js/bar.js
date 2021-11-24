@@ -143,7 +143,6 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     const innerHeight = height - margin.top - margin.bottom
     const innerWidth = width - margin.left - margin.right
 
-    console.log(freq[data[0]])
     xScale = d3.scaleLinear()
         .domain([0, freq[data[0]]])
         .range([margin.left, margin.left+innerWidth]);
@@ -154,16 +153,12 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .padding(0.3);
 
     xAxis = d3.axisTop(xScale)
-    // .tickSizeOuter(0);
+
     yAxis = d3.axisRight(yScale)
     .tickSizeInner(0);
 
-    // let element = 'g#' + id;
     let xname = 'g#xscale_' + id;
     let yname = 'g#yscale_' + id;
-    // svgelement.selectAll(element).remove();
-    // svgelement.selectAll(xname).remove();
-    // svgelement.selectAll(yname).remove();
 
     let g = svgelement
         .append('g')
@@ -192,8 +187,8 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     let y = g.append('g')
         .attr('id', yname)
         .attr("class","yaxisBar")
-        .attr('transform', `translate(35,0)`)
-        .call(yAxis);
+        .attr('transform', `translate(35,0)`)        
+        .call(yAxis.tickFormat(function(d){return d!=-1 ? d : 'external'}));
 
     y.selectAll(".tick text")
     .attr("fill", "black")
@@ -252,8 +247,7 @@ function mouseoverFunc(event, d) {
 function mouseclickFunc(event, d) {
     var data;
     data = getfreqData(d3.select(this).attr('id'));
-    selected_userID = d;
-    commType = data[1];
+    selected.set_values = [d, data[1]];
 
     if (selected_frame == this) {
         d3.select(selected_frame)
@@ -263,8 +257,7 @@ function mouseclickFunc(event, d) {
             .duration('50')
             .style("opacity", 0);
         selected_frame = null;
-        selected_userID = null;
-        commType = null;
+        selected.set_values = [null, null];
     }
     else {
         if (selected_frame != null) {
