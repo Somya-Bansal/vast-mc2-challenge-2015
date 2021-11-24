@@ -1,6 +1,9 @@
-function drawHeatmap(friData, satData, sunData) {
+function drawHeatmap(friData, satData, sunData, userInputs) {
 
-    let dayByUser = d3.select("#weekend-day-select").property("value");
+    const dayByUser = userInputs[0];
+    // const locationByUser = userInputs[1];
+    const outlierFlag = userInputs[2];
+    const externalFlag = userInputs[3];
     let dataToShow
     switch (dayByUser) {
         case "2":
@@ -15,6 +18,19 @@ function drawHeatmap(friData, satData, sunData) {
         case "1":
             dataToShow = Array.prototype.concat(friData, satData, sunData);
             break;
+    }
+    // Filter for External Ids
+    if (!externalFlag) {
+        dataToShow = dataToShow.filter((d) => {
+            return d.ReceiverId_network !== -1;
+        })
+    }
+    // Filter for Outlier Ids
+    const outlierIds = [1278894, 839736]
+    if (!outlierFlag) {
+        dataToShow = dataToShow.filter((d) => {
+            return !outlierIds.includes(d.ReceiverId_network) && !outlierIds.includes(d.SenderId_network) ;
+        })
     }
 
     let heatmapSvg = d3.select("#visHeatmap")
@@ -50,11 +66,11 @@ function drawHeatmap(friData, satData, sunData) {
             })
         })
     })
-    console.log(data)
+    // console.log(data)
 
     const minColor = d3.min(data, d => d['value'])
     const maxColor = d3.max(data, d => d['value'])
-    console.log(minColor, maxColor)
+    // console.log(minColor, maxColor)
 
     // Build X scales and axis:
     var x = d3.scaleBand()

@@ -81,10 +81,23 @@ div.tooltip {
 }
 .labelBar{
     fill:#005f73;
+    stroke: #005f73;
     font-size: 18px;
 }
 .heatmapLabel{
     font-size: 20px;
     stroke: #005f73;
     fill: #005f73;
+}
+.chartControlContainer{
+    font-size: 1.25em;
+    color      : #005f73;
+    background-color:rgba(241, 249, 246, 0.9);
+    box-shadow: 1px 6px 18px rgba(49, 54, 57, 0.3);
+    border-radius: 4px;
+}
+.form-check-inline .form-check-input{
+    height: 18px;
+    width:18px;
+    margin-right: 8px;
 }
