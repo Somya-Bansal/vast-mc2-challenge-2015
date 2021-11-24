@@ -65,12 +65,17 @@ function frequencyAnalyzer(arr, interval) {
 }
 
 function locFilter(arr, loc, ext, outlier) {
+
+    // User ID and communication type
+    var userID;
+    var commType;
+    [userID, commType] = selected.get_values;
     // external filtering
     if(!ext)
         arr = arr.filter(d => d.ReceiverId_network !== -1)
     // bar chart selected id filtering
-    if(selected_userID !== null)
-        arr = arr.filter(d => commType == "sender" ? d.SenderId_network == selected_userID : d.ReceiverId_network == selected_userID)
+    if(userID !== null)
+        arr = arr.filter(d => commType == "sender" ? d.SenderId_network == userID : d.ReceiverId_network == userID)
     switch(loc) {
         case "2":
             arr = arr.filter(d => d.Location == "Entry Corridor")
@@ -93,7 +98,7 @@ function locFilter(arr, loc, ext, outlier) {
     }
 
     // Outlier filtering, only when no user id is selected
-    if(!outlier && selected_userID === null) {
+    if(!outlier && userID === null) {
         let idFreq = new Map()
         arr.forEach(ele => {
             let rd = idFreq.get(ele.ReceiverId_network)
@@ -133,6 +138,11 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     }
     const innerHeight = height - margin.top - margin.bottom
     const innerWidth = width - margin.left - margin.right
+
+    // User ID and communication type
+    var userID;
+    var commType;
+    [userID, commType] = selected.get_values;
     
     var svg = d3.select("#svglinechart");
     svg.selectAll("*").remove();
@@ -307,8 +317,8 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
     // Day and Location Legend
     let infoTags = [day, loc]
-    const uidType = `${commType}: ${selected_userID}`
-    if(selected_userID !== null)
+    const uidType = `${commType}: ${userID}`
+    if(userID !== null)
         infoTags.push(uidType)
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']

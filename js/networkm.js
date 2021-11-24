@@ -15,6 +15,12 @@ function filterOutliersNetwork(adjList, arr, Nstdev = 1) {
 }
 
 function adjacencyList(day, loc, ext, outlier) {
+
+    // User ID and communication type
+    let userID;
+    let commType;
+    [userID, commType] = selected.get_values;
+
     var location = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
     var adjacencyList = new Map();
     var day_data;
@@ -41,8 +47,8 @@ function adjacencyList(day, loc, ext, outlier) {
         day_data = day_data.filter(d => d.ReceiverId_network !== -1)
 
     // selected user id filtering
-    if(selected_userID !== null)
-        day_data = day_data.filter(d => d.ReceiverId_network == selected_userID || d.SenderId_network == selected_userID)
+    if(userID !== null)
+        day_data = day_data.filter(d => d.ReceiverId_network == userID || d.SenderId_network == userID)
 
     day_data.forEach(ele => {
         var adj = adjacencyList.get(ele.SenderId);
@@ -62,7 +68,7 @@ function adjacencyList(day, loc, ext, outlier) {
     })
 
     // Only filter outliers if outliers is not check and no user ID is selected
-    if(!outlier && selected_userID === null) {
+    if(!outlier && userID === null) {
         let adjListSizes = []
         adjacencyList.forEach(ele => {
             adjListSizes.push(ele.size)
@@ -134,7 +140,13 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
 }
 
 function selectiveNetworkMaker(adjList) {
-    let sidMap = adjList.get(`${selected_userID}`)
+
+    // User ID and communication type
+    var userID;
+    var commType;
+    [userID, commType] = selected.get_values;
+
+    let sidMap = adjList.get(`${userID}`)
     if(sidMap === undefined)
         return {nodes: [], links: []}
 
@@ -148,7 +160,7 @@ function selectiveNetworkMaker(adjList) {
     var numnodes = 0
 
     // Add outgoing comms for selected uid
-    nodes.push( {id: 0, name: `${selected_userID}`} )
+    nodes.push( {id: 0, name: `${userID}`} )
     numnodes++;
     for(var i = 0; i < sidMap.size / 10; i++) {
         var val1 = iter1.next().value 
@@ -163,7 +175,7 @@ function selectiveNetworkMaker(adjList) {
     let iter2 = adjListSorted.entries();
     for(var i = 0; i < adjListSorted.size / 10; i++) {
         var val1 = iter2.next().value
-        if(val1[0] == selected_userID || n.get(val1[0]) !== undefined)
+        if(val1[0] == userID || n.get(val1[0]) !== undefined)
             continue;
         
         nodes.push( {id: numnodes, name: val1[0]} )
@@ -187,6 +199,11 @@ function drawNetworkM() {
     else
         ttdiv = d3.select(".tooltip");
 
+    // User ID and communication type
+    var userID;
+    var commType;
+    [userID, commType] = selected.get_values;
+
     const width = 1000
     const height = 600
     const margin = {
@@ -199,7 +216,7 @@ function drawNetworkM() {
     // Create adjacency list and network, params to network function change the amount of nodes added
     var adjList = adjacencyList(day, loc, ext, outlier);
     var ndata
-    if(selected_userID === null)
+    if(userID === null)
         ndata = topXNetworkMaker(adjList, 10, 4, 3);
     else
         ndata = selectiveNetworkMaker(adjList)
@@ -281,8 +298,8 @@ function drawNetworkM() {
 
     // Day and Location Legend
     let infoTags = [day, loc]
-    const uidInfo = `Top tenth outgoing and incoming comms for ${selected_userID}`
-    if(selected_userID !== null)
+    const uidInfo = `Top tenth outgoing and incoming comms for ${userID}`
+    if(userID !== null)
         infoTags.push(uidInfo)
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']

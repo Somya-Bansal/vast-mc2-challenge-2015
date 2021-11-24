@@ -5,9 +5,20 @@ sat_data = [];
 sun_data = [];
 all_days = [];
 
-// Use these vars to identify changes to user ID across charts
-var selected_userID = null;
-var commType = null;
+var selected = {
+	userID: null,
+	commType:null,
+	get get_values(){
+		return [this.userID, this.commType];
+	},
+	set set_values(values){
+		[this.userID, this.commType] = values;
+		let inputs = userInputs();
+		drawLineChart(fri_data, sat_data, sun_data);
+		drawNetworkM(fri_data, sat_data, sun_data);
+		drawInnovativeChart(fri_data, sat_data, sun_data, inputs);
+	}
+}
 
 // This function is called once the HTML page is fully loaded by the browser
 document.addEventListener('DOMContentLoaded', function () {
