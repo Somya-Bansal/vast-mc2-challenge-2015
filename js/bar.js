@@ -154,11 +154,16 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .padding(0.3);
 
     xAxis = d3.axisTop(xScale)
+    // .tickSizeOuter(0);
     yAxis = d3.axisRight(yScale)
     .tickSizeInner(0);
 
+    // let element = 'g#' + id;
     let xname = 'g#xscale_' + id;
     let yname = 'g#yscale_' + id;
+    // svgelement.selectAll(element).remove();
+    // svgelement.selectAll(xname).remove();
+    // svgelement.selectAll(yname).remove();
 
     let g = svgelement
         .append('g')
@@ -247,7 +252,8 @@ function mouseoverFunc(event, d) {
 function mouseclickFunc(event, d) {
     var data;
     data = getfreqData(d3.select(this).attr('id'));
-    selected.set_values = [d, data[1]]
+    selected_userID = d;
+    commType = data[1];
 
     if (selected_frame == this) {
         d3.select(selected_frame)
@@ -257,7 +263,8 @@ function mouseclickFunc(event, d) {
             .duration('50')
             .style("opacity", 0);
         selected_frame = null;
-        selected.set_values = [null, null]
+        selected_userID = null;
+        commType = null;
     }
     else {
         if (selected_frame != null) {

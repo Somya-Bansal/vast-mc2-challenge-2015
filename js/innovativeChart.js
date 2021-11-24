@@ -1,14 +1,9 @@
 function drawInnovativeChart(friData, satData, sunData, userInputs) {
 
-    let userID;
-    let commType;
-    [userID, commType] = selected.get_values
-
     const dayByUser = userInputs[0];
     const locationByUser = userInputs[1];
     const outlierFlag = userInputs[2];
     const externalFlag = userInputs[3];
-
     let dataToShow
 
     switch (dayByUser) {
@@ -56,18 +51,7 @@ function drawInnovativeChart(friData, satData, sunData, userInputs) {
     locations = ["Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"]
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(locations);
 
-    if (commType != null){
-        if (commType=='sender'){
-            document.getElementById('commRadioSender').checked = "checked"
-            document.getElementById('commRadioReceiver').checked = ""
-        }else{
-            document.getElementById('commRadioSender').checked = ""
-            document.getElementById('commRadioReceiver').checked = "checked"
-        }
-    }
     let innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
-    console.log(innovativeCommType)
-
     res = d3.rollup(
         dataToShow.filter((it) => {
             
