@@ -40,8 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 });
 
-document.addEventListener('change', function () {
-	updateCharts();
+document.addEventListener('change',(event) => {
+	const srcid = event.target.id
+	if(srcid == 'interval-select')
+		drawLineChart(fri_data, sat_data, sun_data)
+	else
+    	updateCharts();
 });
 
 function userInputs() {

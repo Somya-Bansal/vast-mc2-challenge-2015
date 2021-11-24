@@ -285,6 +285,8 @@ function mouseclickFunc(event, d) {
             .style("opacity", 1);
     }
 
+    drawLineChart(fri_data, sat_data, sun_data)
+    drawNetworkM(fri_data, sat_data, sun_data)
 }
 function mouseoutFunc(event, d) {
     if (selected_frame == null || this != selected_frame) {

@@ -1,4 +1,20 @@
-function adjacencyList(day, loc) {
+function filterOutliersNetwork(adjList, arr, Nstdev = 1) {
+
+    let sum = arr.reduce((a, b) => a + b, 0)
+    let mean = (sum / arr.length) || 0;
+    let stdev_num = 0
+    arr.forEach((d) => {
+        stdev_num = stdev_num + Math.pow(d - mean, 2)
+    })
+    let stdev = Math.sqrt(stdev_num / arr.length)
+
+    adjList = new Map([...adjList].filter((d) => {
+        return d[1].size <= stdev * Nstdev;
+    }));
+    return adjList;
+}
+
+function adjacencyList(day, loc, ext, outlier) {
     var location = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
     var adjacencyList = new Map();
     var day_data;
@@ -20,6 +36,14 @@ function adjacencyList(day, loc) {
             break;
     }
 
+    // external filtering
+    if(!ext)
+        day_data = day_data.filter(d => d.ReceiverId_network !== -1)
+
+    // selected user id filtering
+    if(selected_userID !== null)
+        day_data = day_data.filter(d => d.ReceiverId_network == selected_userID || d.SenderId_network == selected_userID)
+
     day_data.forEach(ele => {
         var adj = adjacencyList.get(ele.SenderId);
 
@@ -36,6 +60,15 @@ function adjacencyList(day, loc) {
             adjacencyList.set(ele.SenderId, adj)
         }
     })
+
+    // Only filter outliers if outliers is not check and no user ID is selected
+    if(!outlier && selected_userID === null) {
+        let adjListSizes = []
+        adjacencyList.forEach(ele => {
+            adjListSizes.push(ele.size)
+        })
+        adjacencyList = filterOutliersNetwork(adjacencyList, adjListSizes, 1)
+    }
 
     // Sort the map of sender id and map pairs by size of map (degree of the sender id)
     const sortMapSize = ([, a], [, b]) => a.size < b.size;
@@ -100,19 +133,76 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
     return { nodes: nodes, links: links }
 }
 
+function selectiveNetworkMaker(adjList) {
+    let sidMap = adjList.get(`${selected_userID}`)
+    if(sidMap === undefined)
+        return {nodes: [], links: []}
+
+    const sortMapFreq = ([, a], [, b]) => a < b;
+    const sortArrMapFreq = ([, a], [, b]) => a.entries().next().value[1] < b.entries().next().value[1];
+    let iter1 = new Map([...sidMap].sort(sortMapFreq)).entries();
+
+    var n = new Map();
+    var nodes = []
+    var links = []
+    var numnodes = 0
+
+    // Add outgoing comms for selected uid
+    nodes.push( {id: 0, name: `${selected_userID}`} )
+    numnodes++;
+    for(var i = 0; i < sidMap.size / 10; i++) {
+        var val1 = iter1.next().value 
+        nodes.push( {id: numnodes, name: val1[0]} )
+        links.push({ source: 0, target: numnodes})
+        n.set(val1[0], numnodes)
+        numnodes++;
+    }
+
+    // Add incoming comms for selected uid
+    let adjListSorted = new Map([...adjList].sort(sortArrMapFreq));
+    let iter2 = adjListSorted.entries();
+    for(var i = 0; i < adjListSorted.size / 10; i++) {
+        var val1 = iter2.next().value
+        if(val1[0] == selected_userID || n.get(val1[0]) !== undefined)
+            continue;
+        
+        nodes.push( {id: numnodes, name: val1[0]} )
+        links.push({ source: numnodes, target: 0})
+        n.set(val1[0], numnodes)
+        numnodes++;
+    }
+
+    return {nodes: nodes, links: links}
+}
+
 function drawNetworkM() {
     // Grab day selection and tooltip
     var day = d3.select("#weekend-day-select").property("value");
     var loc = d3.select("#location-select").property("value");
+    let ext = document.getElementById('extcomm').checked
+    let outlier = document.getElementById('outliers').checked;
     var ttdiv;
     if (d3.select(".tooltip").empty())
         ttdiv = d3.select('body').append('div').attr('class', 'tooltip').style('opacity', 0);
     else
         ttdiv = d3.select(".tooltip");
 
+    const width = 1000
+    const height = 600
+    const margin = {
+        top: 20,
+        right: 30,
+        bottom: 60,
+        left: 50
+    }
+
     // Create adjacency list and network, params to network function change the amount of nodes added
-    var adjList = adjacencyList(day, loc);
-    var ndata = topXNetworkMaker(adjList, 10, 4, 3);
+    var adjList = adjacencyList(day, loc, ext, outlier);
+    var ndata
+    if(selected_userID === null)
+        ndata = topXNetworkMaker(adjList, 10, 4, 3);
+    else
+        ndata = selectiveNetworkMaker(adjList)
 
     // Add links and nodes
     var svg = d3.select("#svgnetworkm").attr("viewBox", "-500 -300 1000 600");
@@ -153,8 +243,12 @@ function drawNetworkM() {
             let cn = d.name > 0 ? d.name : "external";
             let ca = 0;
             if(d.name > 0) {
-                if(!adjList.get(d.name).size === undefined) {
+                try {
                     ca = adjList.get(d.name).size;
+                } catch (e) {
+                    // Will be TypeError
+                    if(e instanceof TypeError)
+                        ca = "0 valid receivers"
                 }
             }
             ttdiv.html("id: " + cn + "<br>unique receivers: " + ca)
@@ -184,4 +278,19 @@ function drawNetworkM() {
         node.attr("cx", function (d) { return d.x; })
             .attr("cy", function (d) { return d.y; })
     }
+
+    // Day and Location Legend
+    let infoTags = [day, loc]
+    const uidInfo = `Top tenth outgoing and incoming comms for ${selected_userID}`
+    if(selected_userID !== null)
+        infoTags.push(uidInfo)
+    const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
+    const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
+    let daylocLegend = svg.selectAll(".daylocLegend").data(infoTags)
+        .enter().append("g")
+        .attr("class", "daylocLegend")
+        .attr("transform", function(d,i) { return(`translate(${-width/2 + margin.left},${(-height/2 + margin.top) + (20*i)})`); });
+
+    daylocLegend.append("text").text(function (d, i) { return (i == 0 ? day_keys[d - 1] : i == 1?  loc_keys[d - 1] : d); })
+        .attr("font-size", "12px");
 }
