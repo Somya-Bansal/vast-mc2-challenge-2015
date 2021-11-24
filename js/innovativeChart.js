@@ -1,7 +1,11 @@
-function drawInnovativeChart(friData, satData, sunData) {
+function drawInnovativeChart(friData, satData, sunData, userInputs) {
 
-    let dayByUser = d3.select("#weekend-day-select").property("value");
+    const dayByUser = userInputs[0];
+    const locationByUser = userInputs[1];
+    const outlierFlag = userInputs[2];
+    const externalFlag = userInputs[3];
     let dataToShow
+
     switch (dayByUser) {
         case "2":
             dataToShow = friData;
@@ -25,7 +29,19 @@ function drawInnovativeChart(friData, satData, sunData) {
         6: "Coaster Alley"
     }
 
-    let locationByUser = d3.select("#location-select").property("value");
+    // Filter for External Ids
+    if (!externalFlag) {
+        dataToShow = dataToShow.filter((d) => {
+            return d.ReceiverId_network !== -1;
+        })
+    }
+    // Filter for Outlier Ids
+    const outlierIds = [1278894, 839736]
+    if (!outlierFlag) {
+        dataToShow = dataToShow.filter((d) => {
+            return !outlierIds.includes(d.ReceiverId_network) && !outlierIds.includes(d.SenderId_network) ;
+        })
+    }
 
     let innovativeSvg = d3.select("#visInnovative");
     innovativeSvg.selectAll("*").remove();
@@ -35,13 +51,15 @@ function drawInnovativeChart(friData, satData, sunData) {
     locations = ["Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"]
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(locations);
 
+    let innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
     res = d3.rollup(
-        dataToShow.filter((it) => new Date(it.Timestamp).getHours() <= 24),
+        dataToShow.filter((it) => {
+            
+            return new Date(it.Timestamp).getHours() <= 24
+        }),
         (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,
-        // TODO: How to count both sender and receiver data
-        // (d) => d.SenderId,
-        (d) =>d.ReceiverId,
+        (d) => innovativeCommType==="receiver" ? d.ReceiverId : d.SenderId,
     );
     // console.log(res);
 
