@@ -1,4 +1,4 @@
-function drawInnovativeChart(friData, satData, sunData, userInputs) {
+function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
 
     const dayByUser = userInputs[0];
     const locationByUser = userInputs[1];
@@ -56,7 +56,26 @@ function drawInnovativeChart(friData, satData, sunData, userInputs) {
     let commType;
     [userID, commType] = selected.get_values;
     
-    let innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
+    let innovativeCommType;
+
+    if (caller !== null){
+        // calls from form control
+        innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
+        }
+    else{
+        // called on changes to var `selected`
+        if (commType == 'sender'){
+            document.getElementById("commRadioSender").checked = "checked"
+            document.getElementById("commRadioReceiver").checked = ""
+            innovativeCommType = "sender";
+        }
+        else{
+            document.getElementById("commRadioSender").checked = ""
+            document.getElementById("commRadioReceiver").checked = "checked"
+            innovativeCommType = "receiver";
+        }
+        }
+
     res = d3.rollup(
         dataToShow.filter((it) => {
             
