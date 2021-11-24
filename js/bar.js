@@ -143,7 +143,6 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     const innerHeight = height - margin.top - margin.bottom
     const innerWidth = width - margin.left - margin.right
 
-    console.log(freq[data[0]])
     xScale = d3.scaleLinear()
         .domain([0, freq[data[0]]])
         .range([margin.left, margin.left+innerWidth]);
@@ -188,8 +187,8 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     let y = g.append('g')
         .attr('id', yname)
         .attr("class","yaxisBar")
-        .attr('transform', `translate(35,0)`)
-        .call(yAxis);
+        .attr('transform', `translate(35,0)`)        
+        .call(yAxis.tickFormat(function(d){return d!=-1 ? d : 'external'}));
 
     y.selectAll(".tick text")
     .attr("fill", "black")
