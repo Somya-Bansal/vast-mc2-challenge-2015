@@ -153,8 +153,12 @@ function drawNetworkM() {
             let cn = d.name > 0 ? d.name : "external";
             let ca = 0;
             if(d.name > 0) {
-                if(!adjList.get(d.name).size === undefined) {
+                try {
                     ca = adjList.get(d.name).size;
+                } catch (e) {
+                    // Will be TypeError
+                    if(e instanceof TypeError)
+                        ca = "0 within location"
                 }
             }
             ttdiv.html("id: " + cn + "<br>unique receivers: " + ca)
