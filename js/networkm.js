@@ -20,6 +20,12 @@ function adjacencyList(day, loc) {
             break;
     }
 
+    // Filter by userID if commType is set to 'sender'
+    let userID;
+    let commType;
+    [userID, commType] = selected.get_values
+    console.log([userID, commType])
+
     day_data.forEach(ele => {
         var adj = adjacencyList.get(ele.SenderId);
 

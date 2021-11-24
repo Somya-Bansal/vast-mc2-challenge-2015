@@ -1,5 +1,10 @@
 function drawInnovativeChart(friData, satData, sunData) {
 
+    let userID;
+    let commType;
+
+    [userID, commType] = selected.get_values
+
     let dayByUser = d3.select("#weekend-day-select").property("value");
     let dataToShow
     switch (dayByUser) {
@@ -41,7 +46,7 @@ function drawInnovativeChart(friData, satData, sunData) {
         (d) => d.Location,
         // TODO: How to count both sender and receiver data
         // (d) => d.SenderId,
-        (d) =>d.ReceiverId,
+        (d) => commType == null || commType == 'receiver' ? d.ReceiverId_network : d.SenderId_network,
     );
     // console.log(res);
 
