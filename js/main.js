@@ -16,7 +16,7 @@ var selected = {
 		let inputs = userInputs();
 		drawLineChart(fri_data, sat_data, sun_data);
 		drawNetworkM(fri_data, sat_data, sun_data);
-		drawInnovativeChart(fri_data, sat_data, sun_data, inputs);
+		drawInnovativeChart(fri_data, sat_data, sun_data, inputs, srcid=null);
 	}
 }
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
 			drawLineChart(fri_data, sat_data, sun_data);
 			drawNetworkM(fri_data, sat_data, sun_data);
-			drawInnovativeChart(fri_data, sat_data, sun_data, inputs);
+			drawInnovativeChart(fri_data, sat_data, sun_data, inputs, srcid=null);
 			drawHeatmap(fri_data, sat_data, sun_data, inputs);
 		});
 });
@@ -56,7 +56,7 @@ document.addEventListener('change',(event) => {
 	if(srcid == 'interval-select')
 		drawLineChart(fri_data, sat_data, sun_data)
 	else if(srcid == 'commRadioSender' || srcid == 'commRadioReceiver')
-		drawInnovativeChart(fri_data, sat_data, sun_data, userInputs());
+		drawInnovativeChart(fri_data, sat_data, sun_data, userInputs(), srcid);
 	else
     	updateCharts();
 });
@@ -75,6 +75,6 @@ function updateCharts() {
 	drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
 	drawLineChart(fri_data, sat_data, sun_data);
 	drawNetworkM(fri_data, sat_data, sun_data);
-	drawInnovativeChart(fri_data, sat_data, sun_data, inputs);
+	drawInnovativeChart(fri_data, sat_data, sun_data, inputs, srcid=null);
 	drawHeatmap(fri_data, sat_data, sun_data, inputs);
 }
