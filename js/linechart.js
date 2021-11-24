@@ -1,6 +1,24 @@
+function filterOutliersLineChart(finalarr, idfreq, Nstdev = 1) {
+    let idarr = [...idfreq]
+    let sum = 0
+    idarr.forEach(ele => {
+        sum += ele[1]
+    })
+    let mean = (sum / idarr.length) || 0;
+    let stdev_num = 0
+    idarr.forEach((d) => {
+        stdev_num = stdev_num + Math.pow(d[1] - mean, 2)
+    })
+    let stdev = Math.sqrt(stdev_num / idarr.length)
+
+    finalarr = finalarr.filter((d) => {
+        return (idfreq.get(d.SenderId_network) <= stdev * Nstdev && idfreq.get(d.ReceiverId_network) <= stdev * Nstdev);
+    });
+    return finalarr;
+}
+
 function frequencyAnalyzer(arr, interval) {
     var frequency;
-    console.log(interval)
     switch (interval) {
         case "hour":
             frequency = new Array(24)
@@ -46,21 +64,54 @@ function frequencyAnalyzer(arr, interval) {
     return frequency;
 }
 
-function locFilter(arr, loc) {
+function locFilter(arr, loc, ext, outlier) {
+    // external filtering
+    if(!ext)
+        arr = arr.filter(d => d.ReceiverId_network !== -1)
+    // bar chart selected id filtering
+    if(selected_userID !== null)
+        arr = arr.filter(d => commType == "sender" ? d.SenderId_network == selected_userID : d.ReceiverId_network == selected_userID)
     switch(loc) {
         case "2":
-            return arr.filter(d => d.Location == "Entry Corridor")
+            arr = arr.filter(d => d.Location == "Entry Corridor")
+            break;
         case "3":
-            return arr.filter(d => d.Location == "Kiddie Land")
+            arr = arr.filter(d => d.Location == "Kiddie Land")
+            break;
         case "4":
-            return arr.filter(d => d.Location == "Tundra Land")
+            arr = arr.filter(d => d.Location == "Tundra Land")
+            break;
         case "5":
-            return arr.filter(d => d.Location == "Wet Land")
+            arr = arr.filter(d => d.Location == "Wet Land")
+            break;
         case "6":
-            return arr.filter(d => d.Location == "Coaster Alley")
+            arr = arr.filter(d => d.Location == "Coaster Alley")
+            break;
         default:
-            return arr;
+            arr = arr;
+            break;
     }
+
+    // Outlier filtering, only when no user id is selected
+    if(!outlier && selected_userID === null) {
+        let idFreq = new Map()
+        arr.forEach(ele => {
+            let rd = idFreq.get(ele.ReceiverId_network)
+            let sd = idFreq.get(ele.SenderId_network)
+            if(rd !== undefined)
+                idFreq.set(ele.ReceiverId_network, rd + 1)
+            else
+                idFreq.set(ele.ReceiverId_network, 1)
+
+            if(sd !== undefined)
+                idFreq.set(ele.SenderId_network, sd + 1)
+            else
+                idFreq.set(ele.SenderId_network, 1)
+        })
+        arr = filterOutliersLineChart(arr, idFreq, 1)
+    }
+
+    return arr;
 }
 
 function drawLineChart(fri_data, sat_data, sun_data) {
@@ -68,7 +119,9 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     // Grab from elements
     var day = d3.select("#weekend-day-select").property("value");
     var loc = d3.select("#location-select").property("value");
-    let interval = "hour";
+    let interval = d3.select("#interval-select").property("value");
+    let ext = document.getElementById('extcomm').checked
+    let outlier = document.getElementById('outliers').checked;
 
     const width = 1000
     const height = 600
@@ -88,21 +141,21 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     var frequency = [];
     switch (day) {
         case "2":
-            fri_data = locFilter(fri_data, loc)
+            fri_data = locFilter(fri_data, loc, ext, outlier)
             frequency = frequencyAnalyzer(fri_data, interval);
             break;
         case "3":
-            sat_data = locFilter(sat_data, loc)
+            sat_data = locFilter(sat_data, loc, ext, outlier)
             frequency = frequencyAnalyzer(sat_data, interval);
             break;
         case "4":
-            sun_data = locFilter(sun_data, loc)
+            sun_data = locFilter(sun_data, loc, ext, outlier)
             frequency = frequencyAnalyzer(sun_data, interval);
             break;
         case "1":
-            fri_data = locFilter(fri_data, loc)
-            sat_data = locFilter(sat_data, loc)
-            sun_data = locFilter(sun_data, loc)
+            fri_data = locFilter(fri_data, loc, ext, outlier)
+            sat_data = locFilter(sat_data, loc, ext, outlier)
+            sun_data = locFilter(sun_data, loc, ext, outlier)
             frequency = [frequencyAnalyzer(fri_data, interval), frequencyAnalyzer(sat_data, interval), frequencyAnalyzer(sun_data, interval)];
             break;
     }
@@ -178,8 +231,10 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
     // Lines
     if (day == "1") {
+        const legend_keys = ["Friday", "Saturday", "Sunday"]
+        const color_keys = ["#0a9396", "#ca6702", "#ee9b00"]
         for (var i = 0; i < frequency.length; i++) {
-            var color = i == 0 ? "#0a9396" : i == 1 ? "#ca6702" : "#ee9b00"
+            var color = color_keys[i] //i == 0 ? "#0a9396" : i == 1 ? "#ca6702" : "#ee9b00"
             svg.append("path")
                 .datum(frequency[i])
                 .attr("fill", "none")
@@ -207,6 +262,20 @@ function drawLineChart(fri_data, sat_data, sun_data) {
                     .y(function (d) { return yScale(+d) })
                 )
         }
+
+        // Line Legend
+        var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
+            .enter().append("g")
+            .attr("class", "lineLegend")
+            .attr("transform", function(d, i) { return("translate(" + (width - (margin.left + 110)) + ", "+ (10 + (20 * i)) + ")"); });
+
+        lineLegend.append("text").text(function (d) { return d; })
+            .attr("font-size", "12px")
+            .attr("transform", "translate(15,9)"); //align texts with boxes
+
+        lineLegend.append("rect")
+            .attr("fill", function(d, i) { return(color_keys[i]); })
+            .attr("width", 10).attr("height", 10);
     } else {
         svg.append("path")
             .datum(frequency)
@@ -235,6 +304,21 @@ function drawLineChart(fri_data, sat_data, sun_data) {
                 .y(function (d) { return yScale(+d) })
             )
     }
+
+    // Day and Location Legend
+    let infoTags = [day, loc]
+    const uidType = `${commType}: ${selected_userID}`
+    if(selected_userID !== null)
+        infoTags.push(uidType)
+    const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
+    const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
+    let tagLegend = svg.selectAll(".daylocLegend").data(infoTags)
+        .enter().append("g")
+        .attr("class", "tagLegend")
+        .attr("transform", function(d,i) { return(`translate(${margin.left + 20},${margin.top + (margin.top*i)})`); });
+
+    tagLegend.append("text").text(function (d, i) { return (i == 0 ? day_keys[d - 1] : i == 1 ? loc_keys[d - 1] : d); })
+        .attr("font-size", "12px");
 
     // Interactions
     // Interaction circle
