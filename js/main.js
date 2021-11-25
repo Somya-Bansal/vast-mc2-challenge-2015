@@ -12,13 +12,18 @@ var selected = {
 		return [this.userID, this.commType];
 	},
 	set set_values(values){
-		[this.userID, this.commType] = values;
+		let flag=true; // Choose to redraw the charts from setter or not
+		[this.userID, this.commType, flag] = values;
+		if (flag=true){
 		let inputs = userInputs();
 		drawLineChart(fri_data, sat_data, sun_data);
 		drawNetworkM(fri_data, sat_data, sun_data);
 		drawInnovativeChart(fri_data, sat_data, sun_data, inputs, srcid=null);
+		}
 	}
 }
+
+var cache={};
 
 // This function is called once the HTML page is fully loaded by the browser
 document.addEventListener('DOMContentLoaded', function () {
@@ -71,6 +76,7 @@ function userInputs() {
 }
 
 function updateCharts() {
+	selected.set_values = [null, null, false]
 	var inputs = userInputs();
 	drawBar(inputs[0], inputs[1], inputs[2], inputs[3]);
 	drawLineChart(fri_data, sat_data, sun_data);

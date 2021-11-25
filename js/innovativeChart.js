@@ -75,7 +75,13 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
             innovativeCommType = "receiver";
         }
     }
-
+    var root;
+    var key='inno_'+dayByUser+"-"+locationByUser+'-'+outlierFlag+'-'+externalFlag;
+    let temp = cache[key];
+    if (temp != null){
+        [res, hierarchyData, root] = temp;
+    }
+    else{
     res = d3.rollup(
         dataToShow.filter((it) => {
 
@@ -92,8 +98,12 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
         .hierarchy([null, res], childrenAccessorFn)
         .sum(([, value]) => value)
         .sort((a, b) => b.value - a.value);
+    
+    root = d3.pack().size([width, height]).padding(0.5)(hierarchyData)
 
-    const root = d3.pack().size([width, height]).padding(0.5)(hierarchyData)
+    cache[key] = [res, hierarchyData, root];
+    }
+    
     let focus = root;
     let view;
 

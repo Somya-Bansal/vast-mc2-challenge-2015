@@ -214,12 +214,25 @@ function drawNetworkM() {
     }
 
     // Create adjacency list and network, params to network function change the amount of nodes added
-    var adjList = adjacencyList(day, loc, ext, outlier);
-    var ndata
-    if(userID === null)
+    key="network_"+day+"-"+loc+'-'+ext+'-'+outlier+'_'+userID;
+    var temp = cache[key]
+    var adjList;
+    var ndata;
+
+    if (temp != null){
+        adjList = temp;
+    }
+    else{
+        adjList = adjacencyList(day, loc, ext, outlier);
+        cache[key] = adjList;
+    }
+    
+    if(userID === null){
         ndata = topXNetworkMaker(adjList, 25, 4, 3);
-    else
-        ndata = selectiveNetworkMaker(adjList)
+    }
+    else{
+        ndata = selectiveNetworkMaker(adjList);
+    }
 
     // Add links and nodes
     var svg = d3.select("#svgnetworkm").attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`);
@@ -284,8 +297,8 @@ function drawNetworkM() {
 
     // The forceNode strength determines the push and pull between nodes, can result in nodes off screen
     var simulation = d3.forceSimulation(ndata.nodes).force("link", forceLink).force("charge", forceNode.strength(-75))
-        .force("x", d3.forceX()).force("y", d3.forceY()).on("end", ticked);
-
+        .force("x", d3.forceX()).force("y", d3.forceY()).on("tick", ticked);
+    simulation.tick(10);
     function ticked() {
         link.attr("x1", function (d) { return d.source.x; })
             .attr("y1", function (d) { return d.source.y; })
@@ -298,7 +311,7 @@ function drawNetworkM() {
 
     // Day and Location Legend
     let infoTags = [day, loc]
-    const uidInfo = `Top tenth outgoing and incoming comms for ${userID}`
+    const uidInfo = `Top ten outgoing and incoming comms for ${userID}`
     if(userID !== null)
         infoTags.push(uidInfo)
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']

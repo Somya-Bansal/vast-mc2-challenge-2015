@@ -247,7 +247,7 @@ function mouseoverFunc(event, d) {
 function mouseclickFunc(event, d) {
     var data;
     data = getfreqData(d3.select(this).attr('id'));
-    selected.set_values = [d, data[1]];
+    selected.set_values = [d, data[1], true];
 
     if (selected_frame == this) {
         d3.select(selected_frame)
@@ -257,7 +257,7 @@ function mouseclickFunc(event, d) {
             .duration('50')
             .style("opacity", 0);
         selected_frame = null;
-        selected.set_values = [null, null];
+        selected.set_values = [null, null, true];
     }
     else {
         if (selected_frame != null) {
@@ -277,9 +277,6 @@ function mouseclickFunc(event, d) {
             .duration(50)
             .style("opacity", 1);
     }
-
-    drawLineChart(fri_data, sat_data, sun_data)
-    drawNetworkM(fri_data, sat_data, sun_data)
 }
 function mouseoutFunc(event, d) {
     if (selected_frame == null || this != selected_frame) {
