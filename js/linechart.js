@@ -216,7 +216,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         .attr("text-anchor", "middle")
         .attr("class", "labelBar")
         .attr("x", (width + 100) / 2)
-        .attr("y", innerHeight + 60)
+        .attr("y", innerHeight + 70)
         .text("Time");
 
     // Y Axis
@@ -238,7 +238,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         .attr("id", "ylabel")
         .attr("text-anchor", "middle")
         .attr("x", -height / 2)
-        .attr("y", 30)
+        .attr("y", 20)
         .attr("dy", ".75em")
         .attr("class", "labelBar")
         .attr("transform", "rotate(-90)")
@@ -254,7 +254,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
                 .datum(frequency[i])
                 .attr("fill", "none")
                 .attr("stroke", color)
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 2)
                 .attr("d", d3.line()
                     .x(function (d, i) {
                         switch (interval) {
@@ -296,7 +296,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
             .datum(frequency)
             .attr("fill", "none")
             .attr("stroke", "#005f73")
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", 2)
             .attr("d", d3.line()
                 .x(function (d, i) {
                     switch (interval) {
