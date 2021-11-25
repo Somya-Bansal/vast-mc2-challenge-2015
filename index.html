@@ -59,20 +59,23 @@
 
     <!-- Chart SVGs -->
 
-    <!-- Bar Chart -->
     <div class="d-flex justify-content-center barChartContainer w-100">
-      <div class="mx-3">
-        <svg id="barchart" width="600" height="600"></svg>
+      <div class="d-flex flex-column align-items-center mx-4 py-4">
+        <span class="chartTitle">Top Communicators</span>
+        <!-- Bar Chart -->
+        <svg id="barchart" width="650" height="400"></svg>
+        <svg id="barchart2" width="650" height="400"></svg>
       </div>
-      <div class="mx-3">
-        <svg id="barchart2" width="600" height="600"></svg>
+      <!-- Network Chart -->
+      <div class="d-flex flex-column align-items-center networkChartContainer" id="visnetworkm">
+        <span class="chartTitle">Top Communications</span>
+        <svg class="networkSvg" id="svgnetworkm" width="600" height="750"></svg>
       </div>
     </div>
 
     <!-- Line Chart -->
     <div class="d-flex flex-column align-items-center w-100 lineChartContainer" id="vislinechart">
-      <div class="lineChartIntervalControl">
-        <!-- <label for="interval-select" class="inputLabel">Interval</label> -->
+      <div class="chartTitle">
         <span>Amount of Communication every</span>
         <select class="ml-2" id="interval-select">
           <option value="hour" selected="selected">Hour</option>
@@ -83,10 +86,7 @@
       <svg id="svglinechart" width="1200" height="500"></svg>
     </div>
 
-    <!-- Network Chart -->
-    <div class="d-flex justify-content-center border" id="visnetworkm">
-      <svg id="svgnetworkm" width="1000" height="600"></svg>
-    </div>
+
     <div class="d-flex justify-content-center flex-column border">
       <div class="d-flex justify-content-around chartControlContainer p-3">
         <div class="form-check form-check-inline">
@@ -100,7 +100,7 @@
           <label class="form-check-label" for="inlineRadio2">Receivers</label>
         </div>
       </div>
-      <svg id="visInnovative" width="932" height="932"></svg>
+      <svg id="visInnovative" width="632" height="632"></svg>
     </div>
     <div class="d-flex justify-content-center border border">
       <svg id="visHeatmap" width="850" height="250"></svg>

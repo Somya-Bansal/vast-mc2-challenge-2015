@@ -71,12 +71,12 @@ function locFilter(arr, loc, ext, outlier) {
     var commType;
     [userID, commType] = selected.get_values;
     // external filtering
-    if(!ext)
+    if (!ext)
         arr = arr.filter(d => d.ReceiverId_network !== -1)
     // bar chart selected id filtering
-    if(userID !== null)
+    if (userID !== null)
         arr = arr.filter(d => commType == "sender" ? d.SenderId_network == userID : d.ReceiverId_network == userID)
-    switch(loc) {
+    switch (loc) {
         case "2":
             arr = arr.filter(d => d.Location == "Entry Corridor")
             break;
@@ -98,17 +98,17 @@ function locFilter(arr, loc, ext, outlier) {
     }
 
     // Outlier filtering, only when no user id is selected
-    if(!outlier && userID === null) {
+    if (!outlier && userID === null) {
         let idFreq = new Map()
         arr.forEach(ele => {
             let rd = idFreq.get(ele.ReceiverId_network)
             let sd = idFreq.get(ele.SenderId_network)
-            if(rd !== undefined)
+            if (rd !== undefined)
                 idFreq.set(ele.ReceiverId_network, rd + 1)
             else
                 idFreq.set(ele.ReceiverId_network, 1)
 
-            if(sd !== undefined)
+            if (sd !== undefined)
                 idFreq.set(ele.SenderId_network, sd + 1)
             else
                 idFreq.set(ele.SenderId_network, 1)
@@ -149,7 +149,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     var userID;
     var commType;
     [userID, commType] = selected.get_values;
-    
+
     // Calculate communication frequenices within chosen interval
     var frequency = [];
     switch (day) {
@@ -208,6 +208,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     var xAxis = d3.axisBottom(xScale);
 
     svg.append("g")
+        .attr("class", "lineChartAxis")
         .attr("transform", `translate(0,${innerHeight + margin.top})`)
         .call(xAxis.ticks(d3.timeHour.every(1)));
 
@@ -229,6 +230,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     var yAxis = d3.axisLeft(yScale);
 
     svg.append("g")
+        .attr("class", "lineChartAxis")
         .attr("transform", `translate(${margin.left}, 0)`)
         .call(yAxis);
 
@@ -280,14 +282,14 @@ function drawLineChart(fri_data, sat_data, sun_data) {
         var lineLegend = svg.selectAll(".lineLegend").data(legend_keys)
             .enter().append("g")
             .attr("class", "lineLegend")
-            .attr("transform", function(d, i) { return("translate(" + (width - (margin.left + 110)) + ", "+ (10 + (20 * i)) + ")"); });
+            .attr("transform", function (d, i) { return ("translate(" + (width - (margin.left + 110)) + ", " + (10 + (20 * i)) + ")"); });
 
         lineLegend.append("text").text(function (d) { return d; })
             .attr("font-size", "12px")
             .attr("transform", "translate(15,9)"); //align texts with boxes
 
         lineLegend.append("rect")
-            .attr("fill", function(d, i) { return(color_keys[i]); })
+            .attr("fill", function (d, i) { return (color_keys[i]); })
             .attr("width", 10).attr("height", 10);
     } else {
         svg.append("path")
@@ -321,17 +323,17 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     // Day and Location Legend
     let infoTags = [day, loc]
     const uidType = `${commType}: ${userID}`
-    if(userID !== null)
+    if (userID !== null)
         infoTags.push(uidType)
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
     let tagLegend = svg.selectAll(".daylocLegend").data(infoTags)
         .enter().append("g")
         .attr("class", "tagLegend")
-        .attr("transform", function(d,i) { return(`translate(${margin.left + 20},${margin.top + (margin.top*i)})`); });
+        .attr("transform", function (d, i) { return (`translate(${margin.left + 20},${margin.top + (margin.top * i)})`); });
 
     tagLegend.append("text").text(function (d, i) { return (i == 0 ? day_keys[d - 1] : i == 1 ? loc_keys[d - 1] : d); })
-        // .attr("font-size", "12px");
+    // .attr("font-size", "12px");
 
     // Interactions
     // Interaction circle
