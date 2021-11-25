@@ -1,24 +1,26 @@
 body {
     font-family: rubik, Helvetica, Arial, sans-serif;
 }
-.navStyles{
-    background-color:rgba(241, 249, 246, 0.9);
+
+.navStyles {
+    background-color   : rgba(241, 249, 246, 0.9);
     /* background-color:#F1F9F6; */
-    align-items: center;
-    box-shadow: 1px -12px 28px #313639;
+    align-items        : center;
+    box-shadow         : 1px -12px 28px #313639;
 }
-.chartContainer{
-    align-items: center;
-    margin-top: 110px;
-    width: 100%;
+
+.chartContainer {
+    align-items   : center;
+    margin-top    : 108px;
+    width         : 100%;
     flex-direction: column;
-    display: flex;
+    display       : flex;
 }
 
 .inputLabel {
-    font-size  : 1.25em;
-    font-weight: 500;
-    color      : #005f73;
+    font-size    : 1.25em;
+    font-weight  : 500;
+    color        : #005f73;
     margin-bottom: 5px;
 }
 
@@ -30,7 +32,7 @@ input[type=checkbox] {
 /* color palette*/
 .colors {
 
-    /* Primary - #0a9396 - rgb(0, 95, 115) */ 
+    /* Primary - #0a9396 - rgb(0, 95, 115) */
     color: #005f73;
     /* Primary Varient - #005f73 - rgb(10, 147, 150)*/
     color: #0a9396;
@@ -43,46 +45,54 @@ input[type=checkbox] {
     color: #F1FAEE;
     /* Error - #ae2012 */
     color: #ae2012;
-}  
-.barChartContainer{
-    padding: 24px;
-    background-color: rgba(202, 103, 2,0.05);
 }
-.lineChartContainer{
-    padding: 24px;
-    background-color: rgba(0, 95, 115,0.05);
+
+.barChartContainer {
+    background-color: rgba(202, 103, 2, 0.05);
 }
-.lineChartIntervalControl{
-    display: flex;
+
+.lineChartContainer {
+    padding         : 24px;
+    background-color: rgba(0, 95, 115, 0.05);
+}
+
+.networkChartContainer {
+    padding         : 24px;
+    background-color: rgba(202, 103, 2, 0.05);
+}
+
+.chartTitle {
+    /* display        : flex;
     justify-content: center;
-    align-items: center;
-    font-size  : 1.5em;
-    margin-bottom: 10px;
-    /* font-weight: 500; */
-    /* color: #ca6702; */
+    align-items    : center; */
+    font-size         : 1.7em;
+    /* margin-top         : 18px; */
+    /* font-weight    : 500; */
+    /* color          : #ca6702; */
 }
-.lineChartIntervalControl select{
-    padding:2px;
+
+.chartTitle select {
+    padding      : 2px;
     border-radius: 6px;
-    border: 1px solid rgba(49, 54, 57, 0.4);
-    font-size: 18px;
+    border       : 1px solid rgba(49, 54, 57, 0.4);
+    font-size    : 18px;
 }
-  
-.highlightedBar {  
-    stroke: #ca6702;
+
+.highlightedBar {
+    stroke      : #ca6702;
     stroke-width: 2px;
-  }
+}
 
 div.tooltip {
-    position: absolute;
-    text-align: center;
-    padding: .5rem;
-    background: #FFFFFF;
-    color: #313639;
-    border: 1px solid #313639;
-    border-radius: 8px;
+    position      : absolute;
+    text-align    : center;
+    padding       : .5rem;
+    background    : #FFFFFF;
+    color         : #313639;
+    border        : 1px solid #313639;
+    border-radius : 8px;
     pointer-events: none;
-    font-size: 1.0rem;
+    font-size     : 1.0rem;
 }
 
 .sourcenode {
@@ -96,35 +106,57 @@ div.tooltip {
 .node {
     fill: #005f73;
 }
-.barChartRect{
-    fill:rgba(238,155,0,0.6);
+
+.barChartRect {
+    fill: rgba(238, 155, 0, 0.6);
 }
-.yaxisBar .domain{
+
+.yaxisBar .domain {
     stroke: none;
 }
-.labelBar{
-    fill:#005f73;
-    stroke: #005f73;
+
+.labelBar {
+    fill     : #005f73;
+    /* stroke: #005f73; */
     font-size: 18px;
 }
-.heatmapLabel{
+
+.heatmapLabel {
     font-size: 20px;
-    stroke: #005f73;
-    fill: #005f73;
+    /* stroke: #005f73; */
+    fill     : #005f73;
 }
-.chartControlContainer{
-    font-size: 1.25em;
-    color      : #005f73;
-    background-color:rgba(241, 249, 246, 0.9);
-    box-shadow: 1px 6px 18px rgba(49, 54, 57, 0.3);
-    border-radius: 4px;
+
+.chartControlContainer {
+    font-size       : 1.25em;
+    color           : #005f73;
+    background-color: rgba(241, 249, 246, 0.9);
+    box-shadow      : 1px 6px 18px rgba(49, 54, 57, 0.3);
+    border-radius   : 4px;
 }
-.form-check-inline .form-check-input{
-    height: 18px;
-    width:18px;
+
+.form-check-inline .form-check-input {
+    height      : 18px;
+    width       : 18px;
     margin-right: 8px;
 }
-.tagLegend{
-    font-size: 18px;
+
+.tagLegend {
+    font-size     : 18px;
     /* font-weight: 500; */
+}
+
+.daylocLegend {
+    font-size: 18px;
+}
+
+.lineChartAxis .tick {
+    /* stroke:#313639; */
+    fill     : #313639;
+    font-size: 12px;
+}
+
+.networkSvg {
+    /* border-radius: 50%;
+    border: 1px solid #313639; */
 }

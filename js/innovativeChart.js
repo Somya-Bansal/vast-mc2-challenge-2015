@@ -39,7 +39,7 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
     const outlierIds = [1278894, 839736]
     if (!outlierFlag) {
         dataToShow = dataToShow.filter((d) => {
-            return !outlierIds.includes(d.ReceiverId_network) && !outlierIds.includes(d.SenderId_network) ;
+            return !outlierIds.includes(d.ReceiverId_network) && !outlierIds.includes(d.SenderId_network);
         })
     }
 
@@ -50,40 +50,40 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
 
     locations = ["Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"]
     const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(locations);
-    
+
     // User ID and communication type
     let userID;
     let commType;
     [userID, commType] = selected.get_values;
-    
+
     let innovativeCommType;
 
-    if (caller !== null){
+    if (caller !== null) {
         // calls from form control
         innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
-        }
-    else{
+    }
+    else {
         // called on changes to var `selected`
-        if (commType == 'sender'){
+        if (commType == 'sender') {
             document.getElementById("commRadioSender").checked = "checked"
             document.getElementById("commRadioReceiver").checked = ""
             innovativeCommType = "sender";
         }
-        else{
+        else {
             document.getElementById("commRadioSender").checked = ""
             document.getElementById("commRadioReceiver").checked = "checked"
             innovativeCommType = "receiver";
         }
-        }
+    }
 
     res = d3.rollup(
         dataToShow.filter((it) => {
-            
+
             return new Date(it.Timestamp).getHours() <= 24
         }),
         (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,
-        (d) => innovativeCommType==="receiver" ? d.ReceiverId : d.SenderId,
+        (d) => innovativeCommType === "receiver" ? d.ReceiverId : d.SenderId,
     );
     // console.log(res);
 
@@ -110,15 +110,17 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
         .style("fill", (d) => d.parent.data[0] == null ? "white" : colorScale(d.parent.data[0]))
         .attr('opacity', (d) => {
             if (locationMap[locationByUser] === "All Locations") return 0.6
-            return d.parent.data[0] == locationMap[locationByUser] ? "1" : '0.3'
+            else return d.parent.data[0] == locationMap[locationByUser] ? "1" : '0.3'
         })
+        .attr("stroke", (d) => d.data[0] == userID ? "black" : "")
+        .attr("stroke-width", (d) => d.data[0] == userID ? "2px" : "")
         .on('mouseover', mouseover)
         .on('mouseout', mouseout)
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
 
 
     const label = innovativeSvg.append("g")
-        .style("font", "30px sans-serif")
+        .style("font", "24px sans-serif")
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .selectAll("text")
@@ -146,12 +148,10 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
         focus = d;
 
         const transition = innovativeSvg.transition()
-            // .duration(event.altKey ? 7500 : 750)
+            .duration(event.altKey ? 7500 : 750)
             .tween("zoom", d => {
                 const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
-                // console.log(i)
                 return t => {
-                    // console.log(t)
                     return zoomTo(i(t))
                 };
             });
@@ -180,7 +180,7 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
     }
 
     function mouseout(event, d) {
-        d3.select(this).attr("stroke", null);
+        d3.select(this).attr("stroke", d.data[0] == userID ? "black" : null);
         tooltipDiv.transition()
             .duration(50)
             .style("opacity", 0);

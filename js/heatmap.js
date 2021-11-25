@@ -43,7 +43,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
 
     // Labels of row and columns
     let hoursInDay = new Array(24)
-    for (let i = 7; i < 23; i++)
+    for (let i = 8; i <= 23; i++)
         hoursInDay[i] = i;
     var locations = ["Entry Corridor", "Kiddie Land", "Tundra Land", "Wet Land", "Coaster Alley"]
 
@@ -53,7 +53,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
         // .filter((it) => new Date(it.Timestamp).getHours() <= 24),
         (d) => d.length,
         (d) => d.Location,
-        (d) => (d.Timestamp_network.getHours() - 1),
+        (d) => (d.Timestamp_network.getHours()),
     );
     let data = []
 

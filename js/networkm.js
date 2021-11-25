@@ -204,12 +204,12 @@ function drawNetworkM() {
     var commType;
     [userID, commType] = selected.get_values;
 
-    const width = 1000
-    const height = 600
+    const width = 600
+    const height = 750
     const margin = {
-        top: 20,
-        right: 30,
-        bottom: 60,
+        top: 50,
+        right: 50,
+        bottom: 50,
         left: 50
     }
 
@@ -217,12 +217,12 @@ function drawNetworkM() {
     var adjList = adjacencyList(day, loc, ext, outlier);
     var ndata
     if(userID === null)
-        ndata = topXNetworkMaker(adjList, 10, 4, 3);
+        ndata = topXNetworkMaker(adjList, 25, 4, 3);
     else
         ndata = selectiveNetworkMaker(adjList)
 
     // Add links and nodes
-    var svg = d3.select("#svgnetworkm").attr("viewBox", "-500 -300 1000 600");
+    var svg = d3.select("#svgnetworkm").attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`);
     svg.selectAll("*").remove();
 
     var link = svg.selectAll("line").data(ndata.links).enter().append("line")
@@ -309,5 +309,5 @@ function drawNetworkM() {
         .attr("transform", function(d,i) { return(`translate(${-width/2 + margin.left},${(-height/2 + margin.top) + (20*i)})`); });
 
     daylocLegend.append("text").text(function (d, i) { return (i == 0 ? day_keys[d - 1] : i == 1?  loc_keys[d - 1] : d); })
-        .attr("font-size", "12px");
+        // .attr("font-size", "12px");
 }

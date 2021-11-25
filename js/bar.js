@@ -116,8 +116,8 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
     sIds = !outlier_flag ? computeStats(sIds, Nstdev = 1) : sIds;
     rIds = !outlier_flag ? computeStats(rIds, Nstdev = 1) : rIds;
 
-    sIds = sIds.slice(0, 30);
-    rIds = rIds.slice(0, 30);
+    sIds = sIds.slice(0, 20);
+    rIds = rIds.slice(0, 20);
 
     barchart(sIds, SenderId_freq, barSvg, 'barchart', ylabel = 'Sender ID', xlabel = 'Frequency');
     barchart(rIds, ReceiverId_freq, barSvg2, 'barchart2', ylabel = 'Receiver ID', xlabel = 'Frequency')
@@ -132,8 +132,8 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
 function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
 
-    const width = 600
-    const height = 600
+    const width = 650
+    const height = 400
     const margin = {
         top: 60,
         right: 10,
