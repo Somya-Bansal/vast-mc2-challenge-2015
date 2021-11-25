@@ -29,7 +29,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
     const outlierIds = [1278894, 839736]
     if (!outlierFlag) {
         dataToShow = dataToShow.filter((d) => {
-            return !outlierIds.includes(d.ReceiverId_network) && !outlierIds.includes(d.SenderId_network) ;
+            return !outlierIds.includes(d.ReceiverId_network) && !outlierIds.includes(d.SenderId_network);
         })
     }
 
@@ -37,7 +37,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
     heatmapSvg.selectAll("*").remove();
     width = +heatmapSvg.style('width').replace('px', '');
     height = +heatmapSvg.style('height').replace('px', '');
-    const margin = { top: 20, right: 30, bottom: 60, left: 110 },
+    const margin = { top: 40, right: 20, bottom: 20, left: 60 },
         innerWidth = width - margin.left - margin.right,
         innerHeight = height - margin.top - margin.bottom;
 
@@ -75,39 +75,39 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
     // Build X scales and axis:
     var x = d3.scaleBand()
         .range([margin.left, margin.left + innerWidth])
-        .domain(hoursInDay)
-        .padding(0.05);
+        .domain(locations)
+        .padding(0.1);
     heatmapSvg.append("g")
         .style("font-size", 15)
-        .attr("transform", `translate(0,${innerHeight + margin.top})`)
+        .attr("transform", `translate(0,${margin.top + 20})`)
         .call(d3.axisBottom(x).tickSize(0))
         .select(".domain").remove()
 
     heatmapSvg.append("text")
         .attr("text-anchor", "middle")
         .attr("class", "heatmapLabel")
-        .attr("x", (width + 100) / 2)
-        .attr("y", innerHeight + 60)
-        .text("Hour of the day");
+        .attr("x", width / 2)
+        .attr("y", margin.top)
+        .text("Location");
 
-    // Build X scales and axis:
+    // Build Y scales and axis:
     var y = d3.scaleBand()
-        .range([innerHeight + margin.top, margin.top])
-        .domain(locations)
+        .range([margin.top, innerHeight + margin.top])
+        .domain(hoursInDay)
         .padding(0.05);
     heatmapSvg.append("g")
-        .attr("transform", `translate(${margin.left + 20}, 0)`)
+        .attr("transform", `translate(${margin.left}, 0)`)
         .style("font-size", 15)
         .call(d3.axisLeft(y).tickSize(0))
         .select(".domain").remove()
     heatmapSvg.append("text")
         .attr("text-anchor", "middle")
         .attr("class", "heatmapLabel")
-        .attr("x", (-height / 2) + 25)
+        .attr("x", (-innerHeight / 2)-margin.top)
         .attr("y", 10)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
-        .text("Location");
+        .text("Hour of the Day");
 
     // Build color scale
     var myColor = d3.scaleLinear()
@@ -122,8 +122,8 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
         .data(data)
         .enter()
         .append("rect")
-        .attr("x", (d) => x(d['hour']))
-        .attr("y", (d) => y(d['location']))
+        .attr("x", (d) => x(d['location']))
+        .attr("y", (d) => y(d['hour']))
         .attr("width", x.bandwidth())
         .attr("height", y.bandwidth())
         .attr("rx", 4)
