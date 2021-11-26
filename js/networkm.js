@@ -81,6 +81,36 @@ function adjacencyList(day, loc, ext, outlier) {
     return new Map([...adjacencyList].sort(sortMapSize));
 }
 
+// Set ndata in the drawNetworkM function to the result of this function to create the total network
+function totalNetworkMaker(adjList) {
+    var iter1 = adjList.entries();
+    var nodes = []
+    var links = []
+    var n = new Map();
+    var numnodes = 0;
+    for(var i = 0; i < adjList.size; i++) {
+        var val1 = iter1.next().value;
+        if(n.get(val1[0]) === undefined) {
+            n.set(val1[0], numnodes)
+            nodes.push({id: n.get(val1[0]), name: val1[0]});
+            numnodes++;
+        }
+
+        var iter2 = val1[1].entries();
+        for(var j = 0; j < val1[1].size; j++) {
+            var val2 = iter2.next().value;
+            if(n.get(val2[0]) == undefined) {
+                n.set(val2[0], numnodes);
+                nodes.push({id: n.get(val2[0]), name: val2[0]})
+                numnodes++
+            }
+            links.push({ source: n.get(val1[0]), target: n.get(val2[0])})
+        }
+    }
+
+    return { nodes: nodes, links: links }
+}
+
 function topXNetworkMaker(adjList, topx, topy, topz) {
     var iter1 = adjList.entries();
     var nodes = []
@@ -146,31 +176,40 @@ function selectiveNetworkMaker(adjList) {
     var commType;
     [userID, commType] = selected.get_values;
 
-    let sidMap = adjList.get(`${userID}`)
-    if(sidMap === undefined)
-        return {nodes: [], links: []}
-
-    const sortMapFreq = ([, a], [, b]) => a < b;
-    const sortArrMapFreq = ([, a], [, b]) => a.entries().next().value[1] < b.entries().next().value[1];
-    let iter1 = new Map([...sidMap].sort(sortMapFreq)).entries();
-
     var n = new Map();
     var nodes = []
     var links = []
     var numnodes = 0
 
-    // Add outgoing comms for selected uid
-    nodes.push( {id: 0, name: `${userID}`} )
-    numnodes++;
-    for(var i = 0; i < sidMap.size / 10; i++) {
+    if(userID >= 0) {
+        let sidMap = adjList.get(`${userID}`)
+        if(sidMap === undefined)
+            return {nodes: [], links: []}
+
+        const sortMapFreq = ([, a], [, b]) => a < b;
+        let iter1 = new Map([...sidMap].sort(sortMapFreq)).entries();
+
+        // Add outgoing comms for selected uid
+        nodes.push( {id: 0, name: `${userID}`} )
+        numnodes++;
+        for(var i = 0; i < sidMap.size / 10; i++) {
+            var val1 = iter1.next().value 
         var val1 = iter1.next().value 
-        nodes.push( {id: numnodes, name: val1[0]} )
-        links.push({ source: 0, target: numnodes})
-        n.set(val1[0], numnodes)
+            var val1 = iter1.next().value 
+        var val1 = iter1.next().value 
+            var val1 = iter1.next().value 
+            nodes.push( {id: numnodes, name: val1[0]} )
+            links.push({ source: 0, target: numnodes})
+            n.set(val1[0], numnodes)
+            numnodes++;
+        }
+    } else {
+        nodes.push( {id: 0, name: `external`})
         numnodes++;
     }
 
     // Add incoming comms for selected uid
+    const sortArrMapFreq = ([, a], [, b]) => a.entries().next().value[1] < b.entries().next().value[1];
     let adjListSorted = new Map([...adjList].sort(sortArrMapFreq));
     let iter2 = adjListSorted.entries();
     for(var i = 0; i < adjListSorted.size / 10; i++) {
@@ -298,9 +337,9 @@ function drawNetworkM() {
 
     // Day and Location Legend
     let infoTags = [day, loc]
-    const uidInfo = `Top tenth outgoing and incoming comms for ${userID}`
     if(userID !== null)
-        infoTags.push(uidInfo)
+        infoTags.push(`Top tenth outgoing and incoming comms for ${userID < 0 ? 'external' : userID}`)
+
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
     let daylocLegend = svg.selectAll(".daylocLegend").data(infoTags)
