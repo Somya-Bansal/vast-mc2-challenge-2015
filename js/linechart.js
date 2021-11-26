@@ -322,9 +322,9 @@ function drawLineChart(fri_data, sat_data, sun_data) {
 
     // Day and Location Legend
     let infoTags = [day, loc]
-    const uidType = `${commType}: ${userID}`
-    if (userID !== null)
-        infoTags.push(uidType)
+    if (userID !== null) 
+        infoTags.push(`Top tenth outgoing and incoming comms for ${userID < 0 ? 'external' : userID}`)
+
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
     let tagLegend = svg.selectAll(".daylocLegend").data(infoTags)
@@ -381,14 +381,18 @@ function drawLineChart(fri_data, sat_data, sun_data) {
                 var h = Math.floor(totalmins / 60);
                 var m = Math.floor(totalmins % 60);
 
-                ttstr = `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[i - 1];
+                var strfreq = frequency[i-1] === undefined ? 0 : frequency[i-1]
+                ttstr = `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreq;
                 focus
                     .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
                     .attr("cy", yScale(frequency[i - 1]))
                 if (day == "1") {
-                    ttstr = "Friday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[0][i - 1]
-                        + "<br/>------<br/>Saturday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[1][i - 1]
-                        + "<br/>------<br/>Sunday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[2][i - 1];
+                    let strfreqFri = frequency[0][i-1] === undefined ? 0 : frequency[0][i-1]
+                    let strfreqSat = frequency[1][i-1] === undefined ? 0 : frequency[1][i-1]
+                    let strfreqSun = frequency[2][i-1] === undefined ? 0 : frequency[2][i-1]
+                    ttstr = "Friday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreqFri
+                        + "<br/>------<br/>Saturday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreqSat
+                        + "<br/>------<br/>Sunday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreqSun;
                     focus
                         .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
                         .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])))
@@ -400,28 +404,36 @@ function drawLineChart(fri_data, sat_data, sun_data) {
                 var h = Math.floor(totalmins / 60);
                 var m = Math.floor(totalmins % 60);
 
-                ttstr = `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[i - 1];
+                var strfreq = frequency[i-1] === undefined ? 0 : frequency[i-1]
+                ttstr = `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreq;
                 focus
                     .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
                     .attr("cy", yScale(frequency[i - 1]))
                 if (day == "1") {
-                    ttstr = "Friday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[0][i - 1]
-                        + "<br/>------<br/>Saturday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[1][i - 1]
-                        + "<br/>------<br/>Sunday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + frequency[2][i - 1];
+                    let strfreqFri = frequency[0][i-1] === undefined ? 0 : frequency[0][i-1]
+                    let strfreqSat = frequency[1][i-1] === undefined ? 0 : frequency[1][i-1]
+                    let strfreqSun = frequency[2][i-1] === undefined ? 0 : frequency[2][i-1]
+                    ttstr = "Friday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreqFri
+                        + "<br/>------<br/>Saturday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreqSat
+                        + "<br/>------<br/>Sunday<br/>" + `Hour: ${h}:${m}` + "<br/>Frequency: " + strfreqSun;
                     focus
                         .attr("cx", xScale(parseHourMin(`${h}:${m}`)))
                         .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])))
                 }
                 break;
             default:
-                ttstr = "Hour: " + i + "<br/>Frequency: " + frequency[i - 1];
+                var strfreq = frequency[i-1] === undefined ? 0 : frequency[i-1]
+                ttstr = "Hour: " + i + "<br/>Frequency: " + strfreq;
                 focus
                     .attr("cx", xScale(parseHour(i)))
                     .attr("cy", yScale(frequency[i - 1]))
                 if (day == "1") {
-                    ttstr = "Friday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + frequency[0][i - 1]
-                        + "<br/>------<br/>Saturday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + frequency[1][i - 1]
-                        + "<br/>------<br/>Sunday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + frequency[2][i - 1];
+                    let strfreqFri = frequency[0][i-1] === undefined ? 0 : frequency[0][i-1]
+                    let strfreqSat = frequency[1][i-1] === undefined ? 0 : frequency[1][i-1]
+                    let strfreqSun = frequency[2][i-1] === undefined ? 0 : frequency[2][i-1]
+                    ttstr = "Friday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + strfreqFri
+                        + "<br/>------<br/>Saturday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + strfreqSat
+                        + "<br/>------<br/>Sunday<br/>" + `Hour: ${i}` + "<br/>Frequency: " + strfreqSun;
                     focus
                         .attr("cx", xScale(parseHour(i)))
                         .attr("cy", yScale(d3.max([frequency[0][i - 1], frequency[1][i - 1], frequency[2][i - 1]])))
