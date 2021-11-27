@@ -63,7 +63,7 @@ input[type=checkbox] {
 
 
 .chartTitle {
-    font-size         : 1.7em;
+    font-size: 1.7em;
 }
 
 .chartTitle select {
@@ -123,11 +123,11 @@ div.tooltip {
 }
 
 .chartControlContainer {
-    font-size       : 1.25em;
-    color           : #005f73;
+    font-size          : 1.25em;
+    color              : #005f73;
     /* background-color: rgba(241, 249, 246, 0.9); */
     /* box-shadow      : 1px 6px 18px rgba(49, 54, 57, 0.3); */
-    border-radius   : 4px;
+    border-radius      : 4px;
 }
 
 .form-check-inline .form-check-input {
@@ -154,4 +154,36 @@ div.tooltip {
 .networkSvg {
     /* border-radius: 50%;
     border: 1px solid #313639; */
+}
+
+/* Innovative slider classes */
+.track,
+.track-inset,
+.track-overlay {
+    stroke-linecap: round;
+}
+
+.track {
+    stroke        : #000;
+    stroke-opacity: 0.3;
+    stroke-width  : 10px;
+}
+
+.track-inset {
+    stroke      : #dcdcdc;
+    stroke-width: 8px;
+}
+
+.track-overlay {
+    pointer-events: stroke;
+    stroke-width  : 50px;
+    stroke        : transparent;
+    cursor        : crosshair;
+}
+
+.handle {
+    fill          : #fff;
+    stroke        : #000;
+    stroke-opacity: 0.5;
+    stroke-width  : 1.25px;
 }
