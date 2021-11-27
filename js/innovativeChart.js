@@ -69,10 +69,13 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
             document.getElementById("commRadioReceiver").checked = ""
             innovativeCommType = "sender";
         }
-        else {
+        else if (commType == 'receiver') {
             document.getElementById("commRadioSender").checked = ""
             document.getElementById("commRadioReceiver").checked = "checked"
             innovativeCommType = "receiver";
+        }
+        else{
+            innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
         }
     }
     hourOnSlider = +document.querySelector("input[type=range]").value
