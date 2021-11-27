@@ -78,17 +78,25 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
             innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
         }
     }
+    hourOnSlider = +document.querySelector("input[type=range]").value
+    console.log(hourOnSlider)
+
+    let slider = document.getElementById("timeRange");
+    var output = document.getElementById("sliderVal");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
 
     res = d3.rollup(
         dataToShow.filter((it) => {
-
-            return new Date(it.Timestamp).getHours() <= 24
+            return new Date(it.Timestamp).getHours() <= hourOnSlider
         }),
         (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,
         (d) => innovativeCommType === "receiver" ? d.ReceiverId : d.SenderId,
     );
-    // console.log(res);
 
     childrenAccessorFn = ([key, value]) => value.size && Array.from(value);
     hierarchyData = d3
@@ -104,6 +112,12 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
         .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
         .style("cursor", "pointer")
         .on("click", (event) => zoom(event, root));
+
+    // tooltip
+    let tooltipDiv = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
 
     const node = innovativeSvg.append("g")
         .style("border", "red")
@@ -123,15 +137,20 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
 
 
     const label = innovativeSvg.append("g")
-        .style("font", "24px sans-serif")
+        .style("font", "20px sans-serif")
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .selectAll("text")
         .data(root.descendants())
         .join("text")
-        .style("fill-opacity", d => d.parent === root ? 1 : 0)
+        .style("fill-opacity", d => d.parent === root ? 0.5 : 0)
         .style("display", d => d.parent === root ? "inline" : "none")
-        .text(d => d.parent === root ? d.data[0] : "");
+        .text(d => {
+            if (d.parent === root) {
+                if (!d.value) return ""
+                return d.data[0]
+            }
+        });
 
     zoomTo([root.x, root.y, root.r * 2]);
 
@@ -140,9 +159,9 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
 
         view = v;
 
-        label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
-        node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
-        node.attr("r", d => d.r * k);
+        node.attr("r", d => isNaN(d.r * k) ? 0 : d.r * k);
+        node.attr("transform", d => `translate(${isNaN((d.x - v[0]) * k) ? 0 : ((d.x - v[0]) * k)},${isNaN((d.y - v[1]) * k) ? 0 : (d.y - v[1]) * k})`);
+        label.attr("transform", d => `translate(${isNaN((d.x - v[0]) * k) ? 0 : ((d.x - v[0]) * k)},${isNaN((d.y - v[1]) * k) ? 0 : (d.y - v[1]) * k})`);
     }
 
     function zoom(event, d) {
@@ -160,11 +179,6 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
             });
 
     }
-
-    // tooltip
-    let tooltipDiv = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
 
 
     function mouseover(event, d) {
@@ -191,4 +205,17 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
     return innovativeSvg.node();
 
 
+}
+function update(h) {
+    // update position and text of label according to slider scale
+    handle.attr("cx", x(h));
+    sliderLabel
+        .attr("x", x(h))
+        .text(formatDate(h));
+
+    // filter data set and redraw plot
+    var newData = dataset.filter(function (d) {
+        return d.date < h;
+    })
+    drawPlot(newData);
 }
