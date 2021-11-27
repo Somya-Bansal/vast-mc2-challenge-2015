@@ -323,7 +323,7 @@ function drawLineChart(fri_data, sat_data, sun_data) {
     // Day and Location Legend
     let infoTags = [day, loc]
     if (userID !== null) 
-        infoTags.push(`Top tenth outgoing and incoming comms for ${userID < 0 ? 'external' : userID}`)
+        infoTags.push(`Top ten duplex comms for ${userID < 0 ? 'external' : userID}`)
 
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']

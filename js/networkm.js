@@ -322,8 +322,8 @@ function drawNetworkM() {
     const forceLink = d3.forceLink().id(d => d.id).links(ndata.links);
 
     // The forceNode strength determines the push and pull between nodes, can result in nodes off screen
-    var simulation = d3.forceSimulation(ndata.nodes).force("link", forceLink).force("charge", forceNode.strength(-75))
-        .force("x", d3.forceX()).force("y", d3.forceY()).on("end", ticked);
+    var simulation = d3.forceSimulation(ndata.nodes).force("link", forceLink).force("charge", forceNode.strength(-45))
+        .force("x", d3.forceX()).force("y", d3.forceY()).on("tick", ticked);
 
     function ticked() {
         link.attr("x1", function (d) { return d.source.x; })
@@ -338,7 +338,7 @@ function drawNetworkM() {
     // Day and Location Legend
     let infoTags = [day, loc]
     if(userID !== null)
-        infoTags.push(`Top tenth outgoing and incoming comms for ${userID < 0 ? 'external' : userID}`)
+        infoTags.push(`Top ten duplex comms for ${userID < 0 ? 'external' : userID}`)
 
     const day_keys = ['All Days', 'Friday', 'Saturday', 'Sunday']
     const loc_keys = ['All Locations', 'Entry Corridor', 'Kiddie Land', 'Tundra Land', 'Wet Land', 'Coaster Alley']
