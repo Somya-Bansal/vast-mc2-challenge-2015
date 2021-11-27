@@ -12,11 +12,14 @@ var selected = {
 		return [this.userID, this.commType];
 	},
 	set set_values(values){
-		[this.userID, this.commType] = values;
-		let inputs = userInputs();
-		drawLineChart(fri_data, sat_data, sun_data);
-		drawNetworkM(fri_data, sat_data, sun_data);
-		drawInnovativeChart(fri_data, sat_data, sun_data, inputs, srcid=null);
+		let flag;
+		[this.userID, this.commType, flag] = values;
+		if (flag){
+			let inputs = userInputs();
+			drawLineChart(fri_data, sat_data, sun_data);
+			drawNetworkM(fri_data, sat_data, sun_data);
+			drawInnovativeChart(fri_data, sat_data, sun_data, inputs, srcid=null);
+		}
 	}
 }
 
@@ -57,8 +60,10 @@ document.addEventListener('change',(event) => {
 		drawLineChart(fri_data, sat_data, sun_data)
 	else if(srcid == 'commRadioSender' || srcid == 'commRadioReceiver')
 		drawInnovativeChart(fri_data, sat_data, sun_data, userInputs(), srcid);
-	else
+	else{
+		selected.set_values = [null, null, false];
     	updateCharts();
+	}
 });
 
 function userInputs() {
