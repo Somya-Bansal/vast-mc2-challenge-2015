@@ -256,7 +256,7 @@ function drawNetworkM() {
     var adjList = adjacencyList(day, loc, ext, outlier);
     var ndata
     if(userID === null)
-        ndata = topXNetworkMaker(adjList, 25, 4, 3);
+        ndata = topXNetworkMaker(adjList, 100, 1, 1);
     else
         ndata = selectiveNetworkMaker(adjList)
 

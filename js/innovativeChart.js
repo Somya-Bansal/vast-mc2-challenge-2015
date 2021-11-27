@@ -1,4 +1,4 @@
-function drawInnovativeChart(friData, satData, sunData, userInputs, caller, hourOnSlider = null) {
+function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
 
     const dayByUser = userInputs[0];
     const locationByUser = userInputs[1];
@@ -78,18 +78,22 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller, hour
     hourOnSlider = +document.querySelector("input[type=range]").value
     console.log(hourOnSlider)
 
+    let slider = document.getElementById("timeRange");
+    var output = document.getElementById("sliderVal");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
+
     res = d3.rollup(
         dataToShow.filter((it) => {
             return new Date(it.Timestamp).getHours() <= hourOnSlider
-            // if (hourOnSlider != null){
-            //     return new Date(it.Timestamp).getHours() == hourOnSlider
-            // } 
         }),
         (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,
         (d) => innovativeCommType === "receiver" ? d.ReceiverId : d.SenderId,
     );
-    // console.log(res);
 
     childrenAccessorFn = ([key, value]) => value.size && Array.from(value);
     hierarchyData = d3
@@ -130,7 +134,7 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller, hour
 
 
     const label = innovativeSvg.append("g")
-        .style("font", "24px sans-serif")
+        .style("font", "20px sans-serif")
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .selectAll("text")
@@ -140,7 +144,6 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller, hour
         .style("display", d => d.parent === root ? "inline" : "none")
         .text(d => {
             if (d.parent === root) {
-                // console.log(d)
                 if (!d.value) return ""
                 return d.data[0]
             }

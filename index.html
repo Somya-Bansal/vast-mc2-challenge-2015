@@ -96,25 +96,45 @@
       <!-- Innovative chart -->
       <div class="d-flex flex-column align-items-center mx-3">
         <div class="d-flex align-items-center">
-          <span class="chartTitle">Communications by </span>
           <div class="d-flex justify-content-around flex-column chartControlContainer p-3">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="communicationTypeRadio" id="commRadioSender"
                 value="sender" checked>
-              <label class="form-check-label" for="inlineRadio1">Senders</label>
+              <label class="form-check-label" for="inlineRadio1">Senders'</label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="communicationTypeRadio" id="commRadioReceiver"
                 value="receiver">
-              <label class="form-check-label" for="inlineRadio2">Receivers</label>
+              <label class="form-check-label" for="inlineRadio2">Receivers'</label>
             </div>
           </div>
+          <span class="chartTitle">Cumulative Communications till&nbsp;</span>
+          <span id="sliderVal" class="chartTitle"></span>
+          <span class="chartTitle">th Hour </span>
         </div>
+        <!-- Slider -->
+        <input class="innovativeSlider" id="timeRange" type="range" min="7" max="23" value="13" step="1" list="steplist">
+        <datalist id="steplist" class="sliderTicks">
+          <option>07</option>
+          <option>08</option>
+          <option>09</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+          <option>19</option>
+          <option>20</option>
+          <option>21</option>
+          <option>22</option>
+          <option>23</option>
+        </datalist>
 
         <svg id="visInnovative" width="680" height="680"></svg>
-        <!-- Slider -->
-        <input type="range" min="7" max="23" value="9">
-        <!-- <svg id="slider" width="680" height="70"></svg> -->
       </div>
     </div>
 
