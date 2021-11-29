@@ -89,7 +89,7 @@
 
     <div class="d-flex align-items-center justify-content-center w-100">
       <!-- Heatmap -->
-      <div class="d-flex flex-column align-items-center mx-3">
+      <div class="d-flex flex-column align-items-center mx-3 pt-3">
         <span class="chartTitle">Hourly Communications</span>
         <svg id="visHeatmap" width="600" height="750"></svg>
       </div>
@@ -108,31 +108,37 @@
               <label class="form-check-label" for="inlineRadio2">Receivers'</label>
             </div>
           </div>
-          <span class="chartTitle">Cumulative Communications till&nbsp;</span>
-          <span id="sliderVal" class="chartTitle"></span>
-          <span class="chartTitle">th Hour </span>
+          <div>
+            <div>
+              <span class="chartTitle">Cumulative Communications till&nbsp;</span>
+              <span id="sliderVal" class="chartTitle"></span>
+              <span class="chartTitle">th Hour </span>
+            </div>
+            <!-- Slider -->
+
+            <input class="innovativeSlider" id="timeRange" type="range" min="7" max="23" value="13" step="1"
+              list="steplist">
+            <datalist id="steplist" class="sliderTicks">
+              <option>07</option>
+              <option>08</option>
+              <option>09</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+              <option>21</option>
+              <option>22</option>
+              <option>23</option>
+            </datalist>
+          </div>
         </div>
-        <!-- Slider -->
-        <input class="innovativeSlider" id="timeRange" type="range" min="7" max="23" value="13" step="1" list="steplist">
-        <datalist id="steplist" class="sliderTicks">
-          <option>07</option>
-          <option>08</option>
-          <option>09</option>
-          <option>10</option>
-          <option>11</option>
-          <option>12</option>
-          <option>13</option>
-          <option>14</option>
-          <option>15</option>
-          <option>16</option>
-          <option>17</option>
-          <option>18</option>
-          <option>19</option>
-          <option>20</option>
-          <option>21</option>
-          <option>22</option>
-          <option>23</option>
-        </datalist>
 
         <svg id="visInnovative" width="680" height="680"></svg>
       </div>

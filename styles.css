@@ -118,6 +118,9 @@ div.tooltip {
     font-size: 20px;
     fill     : #005f73;
 }
+.heatmapTicks{
+font-size: 12px;
+}
 
 .chartControlContainer {
     font-size          : 1.7em;
@@ -144,12 +147,13 @@ div.tooltip {
 }
 
 .innovativeSlider {
-    width : 80%;
+    width : 100%;
 }
 
 .sliderTicks{
     display: flex;
-    width: 81%;
+    /* width: 81%; */
     justify-content:  space-between;
-    font-size: 14px;
+    font-size: 12px;
+    margin-top: -6px;
 }

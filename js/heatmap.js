@@ -78,7 +78,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
         .domain(locations)
         .padding(0.1);
     heatmapSvg.append("g")
-        .style("font-size", 15)
+        .attr("class", "heatmapTicks")
         .attr("transform", `translate(0,${margin.top + 20})`)
         .call(d3.axisBottom(x).tickSize(0))
         .select(".domain").remove()
@@ -97,7 +97,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
         .padding(0.05);
     heatmapSvg.append("g")
         .attr("transform", `translate(${margin.left}, 0)`)
-        .style("font-size", 15)
+        .attr("class", "heatmapTicks")
         .call(d3.axisLeft(y).tickSize(0))
         .select(".domain").remove()
     heatmapSvg.append("text")
