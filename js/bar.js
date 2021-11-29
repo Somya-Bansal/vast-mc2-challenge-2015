@@ -119,6 +119,8 @@ function drawBar(day, loc, outlier_flag, extcomm_flag) {
     sIds = sIds.slice(0, 20);
     rIds = rIds.slice(0, 20);
 
+    console.log(sIds);
+
     barchart(sIds, SenderId_freq, barSvg, 'barchart', ylabel = 'Sender ID', xlabel = 'Frequency');
     barchart(rIds, ReceiverId_freq, barSvg2, 'barchart2', ylabel = 'Receiver ID', xlabel = 'Frequency')
 
