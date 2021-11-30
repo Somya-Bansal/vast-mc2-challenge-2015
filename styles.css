@@ -97,7 +97,11 @@ div.tooltip {
     fill: #ee9b00;
 }
 
-.node {
+.node0 {
+    fill: #18b2d1;
+}
+
+.node1 {
     fill: #005f73;
 }
 
