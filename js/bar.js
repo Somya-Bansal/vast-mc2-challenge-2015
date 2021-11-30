@@ -26,7 +26,7 @@ function computeStats(arr, Nstdev = 1) {
 
 function drawBar(day, loc, outlier_flag, extcomm_flag) {
 
-    
+
     barSvg = d3.select('#barchart');
     barSvg2 = d3.select('#barchart2');
     barSvg.selectAll("*").remove();
@@ -147,7 +147,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     xScale = d3.scaleLinear()
         .domain([0, freq[data[0]]])
-        .range([margin.left, margin.left+innerWidth]);
+        .range([margin.left, margin.left + innerWidth]);
 
     yScale = d3.scaleBand()
         .domain(data)
@@ -157,7 +157,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
     xAxis = d3.axisTop(xScale)
 
     yAxis = d3.axisRight(yScale)
-    .tickSizeInner(0);
+        .tickSizeInner(0);
 
     let xname = 'g#xscale_' + id;
     let yname = 'g#yscale_' + id;
@@ -173,9 +173,9 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .attr('id', id)
         .attr("x", margin.left)
         .attr("y", function (d) { return yScale(d); })
-        .attr("width", function (d) { return xScale(freq[d])-margin.left })
+        .attr("width", function (d) { return xScale(freq[d]) - margin.left })
         .attr("height", yScale.bandwidth())
-        .attr("class","barChartRect")
+        .attr("class", "barChartRect")
         .on('mouseover', mouseoverFunc)
         .on('mousemove', mousemoveFunc)
         .on('mouseout', mouseoutFunc)
@@ -188,24 +188,24 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
 
     let y = g.append('g')
         .attr('id', yname)
-        .attr("class","yaxisBar")
-        .attr('transform', `translate(35,0)`)        
-        .call(yAxis.tickFormat(function(d){return d!=-1 ? d : 'external'}));
+        .attr("class", "yaxisBar")
+        .attr('transform', `translate(35,0)`)
+        .call(yAxis.tickFormat(function (d) { return d != -1 ? d : 'external' }));
 
     y.selectAll(".tick text")
-    .attr("fill", "black")
-    .attr('font-size', '12px');
+        .attr("fill", "black")
+        .attr('font-size', '12px');
 
     x.selectAll(".tick text")
-    .attr("fill", "black")
-    .attr('font-size', '12px');
+        .attr("fill", "black")
+        .attr('font-size', '12px');
 
     g.append("text")
         .attr("id", "label-y")
         .attr("class", "labelBar")
         .attr("text-anchor", "middle")
-        .attr("x", width/2)
-        .attr("y", margin.top/2-5)
+        .attr("x", width / 2)
+        .attr("y", margin.top / 2 - 5)
         .text(ylabel);
 
     g.append('text')
@@ -213,7 +213,7 @@ function barchart(data, freq, svgelement, id, xlabel = '', ylabel = '') {
         .attr("class", "labelBar")
         .attr('transform', 'rotate(-90)')
         .attr("text-anchor", "middle")
-        .attr("x", -height/2)
+        .attr("x", -height / 2)
         .attr("y", 20)
         .text(xlabel);
 
@@ -249,7 +249,7 @@ function mouseoverFunc(event, d) {
 function mouseclickFunc(event, d) {
     var data;
     data = getfreqData(d3.select(this).attr('id'));
-    selected.set_values = [d, data[1], true];
+    selected.set_values = [d, data[1], null, true];
 
     if (selected_frame == this) {
         d3.select(selected_frame)
@@ -259,7 +259,7 @@ function mouseclickFunc(event, d) {
             .duration('50')
             .style("opacity", 0);
         selected_frame = null;
-        selected.set_values = [null, null, true];
+        selected.set_values = [null, null, null, true];
     }
     else {
         if (selected_frame != null) {

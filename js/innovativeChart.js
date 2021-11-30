@@ -54,7 +54,7 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
     // User ID and communication type
     let userID;
     let commType;
-    [userID, commType] = selected.get_values;
+    [userID, commType, hourFromHeatmap] = selected.get_values;
 
     let innovativeCommType;
 
@@ -74,24 +74,22 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
             document.getElementById("commRadioReceiver").checked = "checked"
             innovativeCommType = "receiver";
         }
-        else{
+        else {
             innovativeCommType = document.querySelector('input[name="communicationTypeRadio"]:checked').value;
         }
     }
     hourOnSlider = +document.querySelector("input[type=range]").value
     console.log(hourOnSlider)
 
-    let slider = document.getElementById("timeRange");
-    var output = document.getElementById("sliderVal");
-    output.innerHTML = slider.value;
-
-    slider.oninput = function () {
-        output.innerHTML = this.value;
+    if (hourFromHeatmap != null) {
+        document.querySelector("input[type=range]").value = hourFromHeatmap
     }
 
     res = d3.rollup(
         dataToShow.filter((it) => {
-            return new Date(it.Timestamp).getHours() <= hourOnSlider
+            // console.log("hourFromHeatmap - ",hourFromHeatmap);
+            if (hourFromHeatmap != null) return new Date(it.Timestamp).getHours() <= hourFromHeatmap
+            else return new Date(it.Timestamp).getHours() <= hourOnSlider
         }),
         (d) => d.length > 100 ? d.length : 0,
         (d) => d.Location,

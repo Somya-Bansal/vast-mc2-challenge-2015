@@ -19,6 +19,9 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
             dataToShow = Array.prototype.concat(friData, satData, sunData);
             break;
     }
+
+    [userID, commType, hourFromHeatmap] = selected.get_values;
+
     // Filter for External Ids
     if (!externalFlag) {
         dataToShow = dataToShow.filter((d) => {
@@ -103,7 +106,7 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
     heatmapSvg.append("text")
         .attr("text-anchor", "middle")
         .attr("class", "heatmapLabel")
-        .attr("x", (-innerHeight / 2)-margin.top)
+        .attr("x", (-innerHeight / 2) - margin.top)
         .attr("y", 10)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
@@ -129,9 +132,11 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
         .attr("rx", 4)
         .attr("ry", 4)
         .style("fill", (d) => myColor(d['value']))
+        .style("stroke", (d) => d['hour'] == hourFromHeatmap ? "black" : "")
+        .attr("stroke-width", (d) => d['hour'] == hourFromHeatmap ? "2px" : "")
         .on('mouseover', mouseover)
-        .on('mouseout', mouseout);
-
+        .on('mouseout', mouseout)
+        .on('click', mouseclick);
     function mouseover(event, d) {
         tooltipDiv.transition()
             .duration(50)
@@ -146,6 +151,19 @@ function drawHeatmap(friData, satData, sunData, userInputs) {
     }
 
     function mouseout(event, d) {
+        if (d['hour'] != hourFromHeatmap){
+
+            tooltipDiv.transition()
+                .duration(50)
+                .style("opacity", 0);
+            d3.select(this)
+                .style("stroke", "none")
+                .style("opacity", 0.8)
+        }
+    }
+    function mouseclick(event, d) {
+        console.log("Clicked", d['hour']);
+        selected.set_values = [userID, commType, d['hour'], true];
         tooltipDiv.transition()
             .duration(50)
             .style("opacity", 0);
