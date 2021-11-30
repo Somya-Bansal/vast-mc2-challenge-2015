@@ -92,7 +92,7 @@ function totalNetworkMaker(adjList) {
         var val1 = iter1.next().value;
         if(n.get(val1[0]) === undefined) {
             n.set(val1[0], numnodes)
-            nodes.push({id: n.get(val1[0]), name: val1[0]});
+            nodes.push({id: n.get(val1[0]), name: val1[0], type: 0});
             numnodes++;
         }
 
@@ -101,7 +101,7 @@ function totalNetworkMaker(adjList) {
             var val2 = iter2.next().value;
             if(n.get(val2[0]) == undefined) {
                 n.set(val2[0], numnodes);
-                nodes.push({id: n.get(val2[0]), name: val2[0]})
+                nodes.push({id: n.get(val2[0]), name: val2[0], type: 1})
                 numnodes++
             }
             links.push({ source: n.get(val1[0]), target: n.get(val2[0])})
@@ -121,7 +121,7 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
         var val1 = iter1.next().value;
         if (n.get(val1[0]) === undefined) {
             n.set(val1[0], numnodes)
-            nodes.push({ id: n.get(val1[0]), name: val1[0] });
+            nodes.push({ id: n.get(val1[0]), name: val1[0], type: 0 });
             numnodes++;
         }
 
@@ -137,7 +137,7 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
             //Check if node already exists
             if (n.get(val2[0]) === undefined) {
                 n.set(val2[0], numnodes);
-                nodes.push({ id: n.get(val2[0]), name: val2[0] })
+                nodes.push({ id: n.get(val2[0]), name: val2[0], type: 1 })
                 numnodes++;
             }
             links.push({ source: n.get(val1[0]), target: n.get(val2[0]) })
@@ -157,7 +157,7 @@ function topXNetworkMaker(adjList, topx, topy, topz) {
                     // Check if node already exits
                     if (n.get(val3[0]) === undefined) {
                         n.set(val3[0], numnodes);
-                        nodes.push({ id: n.get(val3[0]), name: val3[0] })
+                        nodes.push({ id: n.get(val3[0]), name: val3[0], type: 1 })
                         numnodes++;
                     }
                     links.push({ source: n.get(val2[0]), target: n.get(val3[0]) })
@@ -181,7 +181,7 @@ function selectiveNetworkMaker(adjList) {
     var links = []
     var numnodes = 0
 
-    if(userID >= 0) {
+    if(userID >= 0 && adjList.get(`${userID}`) !== undefined) {
         let sidMap = adjList.get(`${userID}`)
         if(sidMap === undefined)
             return {nodes: [], links: []}
@@ -190,21 +190,18 @@ function selectiveNetworkMaker(adjList) {
         let iter1 = new Map([...sidMap].sort(sortMapFreq)).entries();
 
         // Add outgoing comms for selected uid
-        nodes.push( {id: 0, name: `${userID}`} )
+        nodes.push( {id: 0, name: `${userID}`, type: 0} )
         numnodes++;
         for(var i = 0; i < sidMap.size / 10; i++) {
-            var val1 = iter1.next().value 
-        var val1 = iter1.next().value 
-            var val1 = iter1.next().value 
-        var val1 = iter1.next().value 
-            var val1 = iter1.next().value 
-            nodes.push( {id: numnodes, name: val1[0]} )
+            var val1 = iter1.next().value;
+            nodes.push( {id: numnodes, name: val1[0], type: 1} )
             links.push({ source: 0, target: numnodes})
             n.set(val1[0], numnodes)
             numnodes++;
         }
     } else {
-        nodes.push( {id: 0, name: `external`})
+        let n = userID < 0 ? 'external' : `${userID}`
+        nodes.push( {id: 0, name: n, type: 0})
         numnodes++;
     }
 
@@ -217,7 +214,7 @@ function selectiveNetworkMaker(adjList) {
         if(val1[0] == userID || n.get(val1[0]) !== undefined)
             continue;
         
-        nodes.push( {id: numnodes, name: val1[0]} )
+        nodes.push( {id: numnodes, name: val1[0], type: 1} )
         links.push({ source: numnodes, target: 0})
         n.set(val1[0], numnodes)
         numnodes++;
@@ -284,12 +281,12 @@ function drawNetworkM() {
         })
         .on('mouseout', function (e, d) {
             d3.select(this).attr("stroke-width", 2)
-            d3.select(`#c${d.source.name}`).attr("class", "node")
-            d3.select(`#c${d.target.name}`).attr("class", "node")
+            d3.select(`#c${d.source.name}`).attr("class", function(d) { return `node${d.type}`})
+            d3.select(`#c${d.target.name}`).attr("class", function(d) { return `node${d.type}`})
             ttdiv.style("opacity", 0);
         });
     var node = svg.selectAll("circle").data(ndata.nodes).enter().append("circle").attr("r", 5).attr("id", function (d) { return "c" + d.name; })
-        .attr("class", "node")
+        .attr("class", function(d) { return `node${d.type}`})
         .on('mouseover', function (e, d) {
             d3.select(this).attr("r", 8)
             d3.selectAll(`.nid${d.id}`).attr("stroke-width", 5);
