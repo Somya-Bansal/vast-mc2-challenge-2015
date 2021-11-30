@@ -81,8 +81,18 @@ function drawInnovativeChart(friData, satData, sunData, userInputs, caller) {
     hourOnSlider = +document.querySelector("input[type=range]").value
     console.log(hourOnSlider)
 
+    let slider = document.getElementById("timeRange");
+    let output = document.getElementById("sliderVal");
+
     if (hourFromHeatmap != null) {
+        console.log("hourFromHeatmap", hourFromHeatmap);
         document.querySelector("input[type=range]").value = hourFromHeatmap
+        output.innerHTML = hourFromHeatmap;
+    }
+    else output.innerHTML = slider.value;
+
+    slider.oninput = function () {
+        output.innerHTML = this.value;
     }
 
     res = d3.rollup(
